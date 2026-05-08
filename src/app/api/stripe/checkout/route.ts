@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
         {
           price_data: {
             currency: 'usd',
-            unit_amount: Number(process.env.PRICE_PER_RESUME || 499),
+            unit_amount: Number(process.env.PRICE_PER_RESUME || 324),
             product_data: { name: 'AI Resume Download', description: 'One-time PDF download' },
           },
           quantity: 1,
