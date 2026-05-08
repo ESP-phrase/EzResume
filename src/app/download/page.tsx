@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { Button } from '@/components/ui/button'
@@ -14,7 +14,7 @@ const PDFDownloadLink = dynamic(
 )
 const ResumeDocument = dynamic(() => import('@/components/pdf/ResumeDocument'), { ssr: false })
 
-export default function DownloadPage() {
+function DownloadInner() {
   const params = useSearchParams()
   const resumeId = params.get('resume_id')
   const sessionId = params.get('session_id')
@@ -83,5 +83,13 @@ export default function DownloadPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function DownloadPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-stone-950" />}>
+      <DownloadInner />
+    </Suspense>
   )
 }
