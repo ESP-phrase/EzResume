@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Loader2, Download } from 'lucide-react'
 import { Logo } from '@/components/Logo'
 import type { Resume } from '@/types/resume'
+import { rdtTrack } from '@/lib/rdt'
 
 const PDFDownloadLink = dynamic(
   () => import('@react-pdf/renderer').then((m) => m.PDFDownloadLink),
@@ -20,6 +21,12 @@ function DownloadInner() {
   const sessionId = params.get('session_id')
   const [resume, setResume] = useState<Resume | null>(null)
   const [ready, setReady] = useState(false)
+
+  useEffect(() => {
+    if (sessionId) {
+      rdtTrack('Purchase', { currency: 'USD' })
+    }
+  }, [sessionId])
 
   useEffect(() => {
     if (!resumeId) return

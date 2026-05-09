@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { CheckCircle, X, ArrowRight } from 'lucide-react'
 import { Logo } from '@/components/Logo'
+import { OneTimeCTA, ProCTA } from './PricingCTA'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -110,9 +111,7 @@ export default function PricingPage() {
                 ))}
               </ul>
 
-              <Link href="/start?plan=one-time" className="w-full border border-stone-700 hover:border-stone-500 text-stone-200 hover:text-white font-semibold text-sm py-3 rounded-xl transition-colors text-center block">
-                Get Started
-              </Link>
+              <OneTimeCTA />
             </div>
 
             {/* Pro */}
@@ -141,9 +140,7 @@ export default function PricingPage() {
                 ))}
               </ul>
 
-              <Link href="/start?plan=subscription" className="w-full bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-sm py-3 rounded-xl transition-colors text-center flex items-center justify-center gap-2">
-                Start for $2/mo <ArrowRight className="w-4 h-4" />
-              </Link>
+              <ProCTA />
               <p className="text-center text-stone-600 text-xs mt-3">Cancel anytime · No questions asked</p>
             </div>
           </div>

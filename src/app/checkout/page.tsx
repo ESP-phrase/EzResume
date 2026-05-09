@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { CheckCircle, Lock, Zap, ArrowLeft, Loader2, ShieldCheck, RefreshCw } from 'lucide-react'
 import { Logo } from '@/components/Logo'
+import { rdtTrack } from '@/lib/rdt'
 
 const PLANS = [
   {
@@ -39,6 +40,11 @@ function CheckoutInner() {
   async function handlePay() {
     setLoading(true)
     setError('')
+    rdtTrack('AddToCart', {
+      currency: 'USD',
+      value: selected === 'subscription' ? 2.00 : 3.24,
+      itemCount: 1,
+    })
     try {
       const res = await fetch('/api/stripe/checkout', {
         method: 'POST',
