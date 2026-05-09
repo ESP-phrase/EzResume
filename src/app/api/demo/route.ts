@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 
-export async function GET() {
+export async function GET(req: Request) {
   const email = 'demo@resumegenius.com'
 
   await db.user.upsert({
@@ -15,6 +15,6 @@ export async function GET() {
 
   await db.magicToken.create({ data: { email, token, expiresAt } })
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3001'
+  const baseUrl = new URL(req.url).origin
   return NextResponse.redirect(`${baseUrl}/api/auth/magic-link/verify?token=${token}`)
 }
