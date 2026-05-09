@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { signOut } from 'next-auth/react'
 import {
   Plus, Trash2, FileText, LogOut, ChevronDown,
-  MoreHorizontal, Pencil, Download, Clock, User
+  MoreHorizontal, Pencil, Download, Clock, User, Sparkles, X, ArrowRight, Loader2
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/Logo'
@@ -129,6 +129,33 @@ export default function DashboardShell({ user, initialResumes }: Props) {
   const [creating, setCreating] = useState(false)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null)
+  const [showPrompt, setShowPrompt] = useState(false)
+  const [prompt, setPrompt] = useState('')
+  const [generating, setGenerating] = useState(false)
+  const [genError, setGenError] = useState('')
+
+  async function handleGenerate() {
+    if (!prompt.trim()) return
+    setGenerating(true)
+    setGenError('')
+    try {
+      const res = await fetch('/api/resumes/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt }),
+      })
+      const data = await res.json()
+      if (data.resume) {
+        router.push(`/builder?id=${data.resume.id}`)
+      } else {
+        setGenError(data.error ?? 'Something went wrong. Try again.')
+        setGenerating(false)
+      }
+    } catch {
+      setGenError('Something went wrong. Try again.')
+      setGenerating(false)
+    }
+  }
 
   async function handleNew() {
     setCreating(true)
@@ -156,6 +183,13 @@ export default function DashboardShell({ user, initialResumes }: Props) {
       <header className="sticky top-0 z-40 bg-stone-950/90 backdrop-blur-md border-b border-stone-800/60 px-6 py-3 flex items-center justify-between">
         <Logo size="md" />
         <div className="flex items-center gap-3">
+          <Button
+            onClick={() => setShowPrompt(true)}
+            className="hidden sm:flex bg-stone-800 hover:bg-stone-700 text-stone-100 font-semibold h-9 px-4 gap-1.5 border border-stone-700"
+          >
+            <Sparkles className="w-4 h-4 text-amber-400" />
+            AI Generate
+          </Button>
           <Button
             onClick={handleNew}
             disabled={creating}
@@ -221,14 +255,24 @@ export default function DashboardShell({ user, initialResumes }: Props) {
               <p className="text-stone-500 text-sm max-w-xs leading-relaxed mb-7">
                 Create your first AI-enhanced resume in under 5 minutes. Free to build, pay when you download.
               </p>
-              <Button
-                onClick={handleNew}
-                disabled={creating}
-                className="bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold px-7 h-11 gap-2"
-              >
-                <Plus className="w-4 h-4" />
-                {creating ? 'Creating…' : 'Create My First Resume'}
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button
+                  onClick={() => setShowPrompt(true)}
+                  className="bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold px-7 h-11 gap-2"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  Generate with AI
+                </Button>
+                <Button
+                  onClick={handleNew}
+                  disabled={creating}
+                  variant="outline"
+                  className="border-stone-700 text-stone-300 hover:bg-stone-800 h-11 gap-2"
+                >
+                  <Plus className="w-4 h-4" />
+                  {creating ? 'Creating…' : 'Start from scratch'}
+                </Button>
+              </div>
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -289,6 +333,63 @@ export default function DashboardShell({ user, initialResumes }: Props) {
           )}
         </div>
       </main>
+
+      {/* AI Generate modal */}
+      {showPrompt && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/80 backdrop-blur-sm px-4">
+          <div className="bg-stone-900 border border-stone-700 rounded-2xl p-6 max-w-lg w-full shadow-2xl">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <Sparkles className="w-5 h-5 text-amber-400" />
+                  <h3 className="text-stone-100 font-bold text-lg">Generate from prompt</h3>
+                </div>
+                <p className="text-stone-500 text-sm">Describe your background and AI will build your full resume in seconds.</p>
+              </div>
+              <button onClick={() => { setShowPrompt(false); setGenError('') }} className="text-stone-600 hover:text-stone-300 transition-colors ml-4">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <textarea
+              value={prompt}
+              onChange={e => setPrompt(e.target.value)}
+              disabled={generating}
+              placeholder={`Examples:\n• "Software engineer, 5 years at Google and Meta, React/Python, Stanford CS degree"\n• "Marketing manager at Nike for 3 years, previously at an agency, expertise in paid social and brand campaigns"\n• Paste your LinkedIn bio, old resume text, or just describe yourself`}
+              rows={7}
+              className="w-full bg-stone-800 border border-stone-700 rounded-xl px-4 py-3 text-stone-100 placeholder:text-stone-600 text-sm focus:outline-none focus:border-amber-500/60 transition-colors resize-none"
+            />
+
+            {genError && (
+              <div className="mt-3 bg-red-500/10 border border-red-500/20 text-red-400 text-xs rounded-lg px-4 py-2.5">
+                {genError}
+              </div>
+            )}
+
+            <div className="flex gap-3 mt-4">
+              <Button
+                variant="outline"
+                onClick={() => { setShowPrompt(false); setGenError('') }}
+                disabled={generating}
+                className="flex-1 border-stone-700 text-stone-300 hover:bg-stone-800 hover:text-white"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleGenerate}
+                disabled={generating || !prompt.trim()}
+                className="flex-1 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold gap-2"
+              >
+                {generating ? (
+                  <><Loader2 className="w-4 h-4 animate-spin" /> Building resume…</>
+                ) : (
+                  <><Sparkles className="w-4 h-4" /> Generate Resume <ArrowRight className="w-4 h-4" /></>
+                )}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Delete confirmation modal */}
       {confirmDelete && (
