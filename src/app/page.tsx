@@ -10,7 +10,7 @@ const jsonLd = {
   description: 'ResumeGenius rewrites your resume into achievement-focused language and exports a polished PDF in minutes.',
   applicationCategory: 'BusinessApplication',
   operatingSystem: 'Web',
-  offers: { '@type': 'Offer', price: '4.99', priceCurrency: 'USD' },
+  offers: { '@type': 'Offer', price: '3.24', priceCurrency: 'USD' },
   aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.9', reviewCount: '2100' },
 }
 
@@ -124,7 +124,7 @@ export default function Home() {
                 </div>
                 <div className="w-px h-8 bg-stone-800" />
                 <div>
-                  <div className="text-2xl font-bold text-stone-100">$4.99</div>
+                  <div className="text-2xl font-bold text-stone-100">$3.24</div>
                   <div className="text-stone-500 text-xs mt-0.5">to download your PDF</div>
                 </div>
               </div>
@@ -380,7 +380,11 @@ export default function Home() {
             <div className="grid grid-cols-2 gap-6 text-left">
               <div className="border border-stone-800 rounded-xl p-8 space-y-5">
                 <div>
-                  <div className="text-3xl font-bold text-stone-100">$4.99</div>
+                  <div className="flex items-baseline gap-2">
+                    <div className="text-3xl font-bold text-stone-100">$3.24</div>
+                    <div className="text-stone-500 text-sm line-through">$4.99</div>
+                    <div className="text-amber-400 text-xs font-bold bg-amber-500/10 px-2 py-0.5 rounded-full">35% off</div>
+                  </div>
                   <div className="font-semibold text-stone-300 mt-1">One-Time Download</div>
                 </div>
                 <ul className="space-y-2.5">
