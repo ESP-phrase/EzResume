@@ -79,8 +79,8 @@ export default function Home() {
         <nav className="border-b border-stone-800/60 px-6 py-4 flex items-center justify-between max-w-7xl mx-auto w-full">
           <Logo size="lg" />
           <div className="flex items-center gap-6">
+            <Link href="/pricing" className="text-stone-500 hover:text-stone-200 text-sm transition-colors">Pricing</Link>
             <Link href="/sign-in" className="text-stone-500 hover:text-stone-200 text-sm transition-colors">Sign In</Link>
-            <Link href="/dashboard" className="text-stone-500 hover:text-stone-200 text-sm transition-colors">Dashboard</Link>
             <Link href="/start">
               <button className="bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-sm px-4 py-2 rounded-lg transition-colors">
                 Build My Resume
@@ -390,7 +390,7 @@ export default function Home() {
                     </li>
                   ))}
                 </ul>
-                <Link href="/start">
+                <Link href="/pricing">
                   <button className="w-full mt-2 border border-stone-700 text-stone-300 hover:bg-stone-800 font-semibold text-sm py-2.5 rounded-lg transition-colors">
                     Get Started
                   </button>
@@ -399,7 +399,7 @@ export default function Home() {
               <div className="border-2 border-amber-500/60 rounded-xl p-8 space-y-5 relative bg-amber-500/5">
                 <div className="absolute top-5 right-5 bg-amber-500 text-stone-950 text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide">BEST VALUE</div>
                 <div>
-                  <div className="text-3xl font-bold text-stone-100">$9.99<span className="text-base font-normal text-stone-500">/mo</span></div>
+                  <div className="text-3xl font-bold text-stone-100">$2<span className="text-base font-normal text-stone-500">/mo</span></div>
                   <div className="font-semibold text-stone-300 mt-1">Monthly Subscription</div>
                 </div>
                 <ul className="space-y-2.5">
@@ -409,9 +409,9 @@ export default function Home() {
                     </li>
                   ))}
                 </ul>
-                <Link href="/start">
+                <Link href="/pricing">
                   <button className="w-full mt-2 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-sm py-2.5 rounded-lg transition-colors">
-                    Start Free Trial
+                    Start for $2/mo
                   </button>
                 </Link>
               </div>
