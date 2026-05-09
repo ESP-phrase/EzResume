@@ -37,7 +37,7 @@ const FAQ = [
   },
   {
     q: 'What happens after I pay?',
-    a: 'You get an instant PDF download. One-time plan gives you that single file forever. Pro gives you unlimited downloads for as long as you're subscribed.',
+    a: "You get an instant PDF download. One-time plan gives you that single file forever. Pro gives you unlimited downloads for as long as you're subscribed.",
   },
   {
     q: 'Can I cancel the subscription?',
@@ -48,7 +48,7 @@ const FAQ = [
     a: 'This is a launch offer. The price will increase once we exit the early-access period. Lock it in now and keep it.',
   },
   {
-    q: 'What if I'm not happy with the output?',
+    q: "What if I'm not happy with the output?",
     a: 'Every bullet is fully editable. The AI gives you a strong starting point — you have complete control over the final version.',
   },
 ]
