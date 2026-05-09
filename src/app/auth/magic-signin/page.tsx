@@ -15,7 +15,13 @@ function MagicSignInInner() {
       router.replace('/sign-in?error=invalid')
       return
     }
-    signIn('magic-token', { token, callbackUrl: '/dashboard' })
+    signIn('magic-token', { token, redirect: false }).then((res) => {
+      if (res?.error) {
+        router.replace('/sign-in?error=expired')
+      } else {
+        window.location.replace('/dashboard')
+      }
+    })
   }, [token, router])
 
   return (
