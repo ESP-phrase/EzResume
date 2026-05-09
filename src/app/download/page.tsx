@@ -21,6 +21,7 @@ function DownloadInner() {
   const sessionId = params.get('session_id')
   const [resume, setResume] = useState<Resume | null>(null)
   const [templateId, setTemplateId] = useState<string>('classic')
+  const [templateConfig, setTemplateConfig] = useState<Record<string, string>>({})
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
@@ -34,9 +35,10 @@ function DownloadInner() {
     const saved = localStorage.getItem(`resume_${resumeId}`)
     if (saved) {
       const parsed = JSON.parse(saved)
-      const { templateId: tid, ...resumeData } = parsed
+      const { templateId: tid, templateConfig: tcfg, ...resumeData } = parsed
       setResume(resumeData)
       if (tid) setTemplateId(tid)
+      if (tcfg) setTemplateConfig(tcfg)
       setReady(true)
     }
   }, [resumeId])
@@ -76,7 +78,7 @@ function DownloadInner() {
 
           {ready && resume && (
             <PDFDownloadLink
-              document={<ResumeDocument resume={resume} templateId={templateId as import('@/types/resume').TemplateId} />}
+              document={<ResumeDocument resume={resume} templateId={templateId as import('@/types/resume').TemplateId} config={templateConfig as Partial<import('@/types/resume').TemplateConfig>} />}
               fileName={`${resume.personalInfo.name?.replace(/\s+/g, '_') || 'resume'}_resume.pdf`}
             >
               {({ loading }) => (

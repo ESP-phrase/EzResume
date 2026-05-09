@@ -42,3 +42,9 @@ export interface Resume {
 export type ResumeSection = 'template' | 'personal' | 'experience' | 'education' | 'skills' | 'preview'
 
 export type TemplateId = 'classic' | 'modern' | 'minimal' | 'bold' | 'sidebar' | 'clean'
+
+export interface TemplateConfig {
+  accentColor: string        // hex e.g. '#2a7d7b'
+  font: 'sans' | 'serif'
+  spacing: 'compact' | 'normal' | 'spacious'
+}

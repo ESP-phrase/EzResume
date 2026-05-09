@@ -1,7 +1,19 @@
 'use client'
 
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer'
-import type { Resume, TemplateId } from '@/types/resume'
+import type { Resume, TemplateId, TemplateConfig } from '@/types/resume'
+
+const DEFAULT_CONFIG: TemplateConfig = { accentColor: '#2a7d7b', font: 'sans', spacing: 'normal' }
+
+function fontFor(cfg: TemplateConfig, bold = false) {
+  if (cfg.font === 'serif') return bold ? 'Times-Bold' : 'Times-Roman'
+  return bold ? 'Helvetica-Bold' : 'Helvetica'
+}
+
+function pad(cfg: TemplateConfig, base: number) {
+  const m = cfg.spacing === 'compact' ? 0.75 : cfg.spacing === 'spacious' ? 1.35 : 1
+  return base * m
+}
 
 /* ─────────────────────────────────────────────
    CLASSIC — Sebastian Bennett style
@@ -30,11 +42,14 @@ const cls = StyleSheet.create({
   footer: { position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: '#2d2d2d', height: 20 },
 })
 
-function ClassicDoc({ resume: r }: { resume: Resume }) {
+function ClassicDoc({ resume: r, cfg }: { resume: Resume; cfg: TemplateConfig }) {
   const p = r.personalInfo
+  const accent = cfg.accentColor
+  const f = (bold = false) => fontFor(cfg, bold)
+  const sp = (n: number) => pad(cfg, n)
   return (
     <Document>
-      <Page size="LETTER" style={cls.page}>
+      <Page size="LETTER" style={{ ...cls.page, fontFamily: f() }}>
         <View style={cls.header}>
           <Text style={cls.name}>{p.name || 'Your Name'}</Text>
           {p.summary && <Text style={cls.jobTitle}>{p.summary.split('.')[0]}</Text>}
@@ -46,30 +61,30 @@ function ClassicDoc({ resume: r }: { resume: Resume }) {
           </View>
         </View>
         <View style={cls.headerDivider} />
-        <View style={cls.body}>
+        <View style={{ ...cls.body }}>
           {p.summary && (
-            <View style={cls.section}>
-              <Text style={cls.sectionHead}>About Me</Text>
-              <View style={cls.sectionLine} />
+            <View style={{ ...cls.section, marginBottom: sp(13) }}>
+              <Text style={{ ...cls.sectionHead, fontFamily: f(true) }}>About Me</Text>
+              <View style={{ ...cls.sectionLine, borderBottomColor: accent }} />
               <Text style={cls.para}>{p.summary}</Text>
             </View>
           )}
           {r.education.length > 0 && (
-            <View style={cls.section}>
-              <Text style={cls.sectionHead}>Education</Text>
-              <View style={cls.sectionLine} />
+            <View style={{ ...cls.section, marginBottom: sp(13) }}>
+              <Text style={{ ...cls.sectionHead, fontFamily: f(true) }}>Education</Text>
+              <View style={{ ...cls.sectionLine, borderBottomColor: accent }} />
               {r.education.map(e => (
-                <View key={e.id} style={{ marginBottom: 7 }}>
+                <View key={e.id} style={{ marginBottom: sp(7) }}>
                   <Text style={cls.entryMeta}>{e.school}{e.graduationDate ? ` | ${e.graduationDate}` : ''}</Text>
-                  <Text style={cls.entryTitle}>{e.degree}{e.field ? ` in ${e.field}` : ''}</Text>
+                  <Text style={{ ...cls.entryTitle, fontFamily: f(true) }}>{e.degree}{e.field ? ` in ${e.field}` : ''}</Text>
                 </View>
               ))}
             </View>
           )}
           {r.experience.length > 0 && (
-            <View style={cls.section}>
-              <Text style={cls.sectionHead}>Work Experience</Text>
-              <View style={cls.sectionLine} />
+            <View style={{ ...cls.section, marginBottom: sp(13) }}>
+              <Text style={{ ...cls.sectionHead, fontFamily: f(true) }}>Work Experience</Text>
+              <View style={{ ...cls.sectionLine, borderBottomColor: accent }} />
               {r.experience.map(e => (
                 <View key={e.id} style={{ marginBottom: 9 }}>
                   <Text style={cls.entryMeta}>{e.company}{e.startDate ? ` | ${e.startDate} – ${e.current ? 'Present' : e.endDate}` : ''}</Text>
@@ -85,13 +100,13 @@ function ClassicDoc({ resume: r }: { resume: Resume }) {
             </View>
           )}
           {r.skills.length > 0 && (
-            <View style={cls.section}>
-              <Text style={cls.sectionHead}>Skills</Text>
-              <View style={cls.sectionLine} />
+            <View style={{ ...cls.section, marginBottom: sp(13) }}>
+              <Text style={{ ...cls.sectionHead, fontFamily: f(true) }}>Skills</Text>
+              <View style={{ ...cls.sectionLine, borderBottomColor: accent }} />
               <View style={cls.skillsGrid}>
                 {r.skills.map(s => (
                   <View key={s.id} style={cls.skillCol}>
-                    <Text style={{ marginRight: 4 }}>•</Text>
+                    <Text style={{ marginRight: 4, color: accent }}>•</Text>
                     <Text style={{ fontSize: 9.5 }}>{s.name}</Text>
                   </View>
                 ))}
@@ -99,7 +114,7 @@ function ClassicDoc({ resume: r }: { resume: Resume }) {
             </View>
           )}
         </View>
-        <View style={cls.footer} fixed />
+        <View style={{ ...cls.footer, backgroundColor: accent }} fixed />
       </Page>
     </Document>
   )
@@ -137,23 +152,26 @@ const mod = StyleSheet.create({
   eduMeta: { fontSize: 9, color: '#888' },
 })
 
-function ModernDoc({ resume: r }: { resume: Resume }) {
+function ModernDoc({ resume: r, cfg }: { resume: Resume; cfg: TemplateConfig }) {
   const p = r.personalInfo
+  const accent = cfg.accentColor
+  const f = (bold = false) => fontFor(cfg, bold)
+  const sp = (n: number) => pad(cfg, n)
   const title = p.summary ? p.summary.split('.')[0] : ''
   return (
     <Document>
       <Page size="LETTER" style={mod.page}>
-        {/* Teal header */}
-        <View style={mod.topBar}>
+        {/* Header */}
+        <View style={{ ...mod.topBar, backgroundColor: accent, fontFamily: f() }}>
           <Text style={mod.topName}>{p.name || 'Your Name'}</Text>
           {title && <Text style={mod.topTitle}>{title.toUpperCase()}</Text>}
         </View>
         <View style={mod.body}>
           {/* Left sidebar */}
-          <View style={mod.sidebar}>
+          <View style={{ ...mod.sidebar, fontFamily: f() }}>
             <View style={mod.sideSection}>
-              <Text style={mod.sideHead}>Contact</Text>
-              <View style={mod.sideLine} />
+              <Text style={{ ...mod.sideHead, fontFamily: f(true) }}>Contact</Text>
+              <View style={{ ...mod.sideLine, borderBottomColor: accent }} />
               {p.email    && <Text style={mod.sideText}>{p.email}</Text>}
               {p.phone    && <Text style={mod.sideText}>{p.phone}</Text>}
               {p.location && <Text style={mod.sideText}>{p.location}</Text>}
@@ -162,8 +180,8 @@ function ModernDoc({ resume: r }: { resume: Resume }) {
             </View>
             {r.education.length > 0 && (
               <View style={mod.sideSection}>
-                <Text style={mod.sideHead}>Education</Text>
-                <View style={mod.sideLine} />
+                <Text style={{ ...mod.sideHead, fontFamily: f(true) }}>Education</Text>
+                <View style={{ ...mod.sideLine, borderBottomColor: accent }} />
                 {r.education.map(e => (
                   <View key={e.id} style={{ marginBottom: 8 }}>
                     <Text style={{ ...mod.sideText, fontFamily: 'Helvetica-Bold', color: '#222' }}>{e.degree}</Text>
@@ -177,18 +195,18 @@ function ModernDoc({ resume: r }: { resume: Resume }) {
             )}
             {r.skills.length > 0 && (
               <View style={mod.sideSection}>
-                <Text style={mod.sideHead}>Skills</Text>
-                <View style={mod.sideLine} />
+                <Text style={{ ...mod.sideHead, fontFamily: f(true) }}>Skills</Text>
+                <View style={{ ...mod.sideLine, borderBottomColor: accent }} />
                 {r.skills.map(s => <Text key={s.id} style={mod.sideBullet}>{s.name}</Text>)}
               </View>
             )}
           </View>
           {/* Main */}
-          <View style={mod.main}>
+          <View style={{ ...mod.main, fontFamily: f() }}>
             {r.experience.length > 0 && (
-              <View style={mod.mainSection}>
-                <Text style={mod.mainHead}>Work Experience</Text>
-                <View style={mod.mainLine} />
+              <View style={{ ...mod.mainSection, marginBottom: sp(16) }}>
+                <Text style={{ ...mod.mainHead, fontFamily: f(true) }}>Work Experience</Text>
+                <View style={{ ...mod.mainLine, borderBottomColor: accent }} />
                 {r.experience.map(e => (
                   <View key={e.id} style={{ marginBottom: 12 }}>
                     <Text style={mod.entryJobTitle}>{e.title}</Text>
@@ -207,9 +225,9 @@ function ModernDoc({ resume: r }: { resume: Resume }) {
               </View>
             )}
             {r.education.length > 0 && (
-              <View style={mod.mainSection}>
-                <Text style={mod.mainHead}>Education</Text>
-                <View style={mod.mainLine} />
+              <View style={{ ...mod.mainSection, marginBottom: sp(16) }}>
+                <Text style={{ ...mod.mainHead, fontFamily: f(true) }}>Education</Text>
+                <View style={{ ...mod.mainLine, borderBottomColor: accent }} />
                 {r.education.map(e => (
                   <View key={e.id} style={{ marginBottom: 8 }}>
                     <Text style={mod.eduTitle}>{e.degree}{e.field ? ` in ${e.field}` : ''}</Text>
@@ -264,15 +282,18 @@ const sb = StyleSheet.create({
   eduDate: { fontSize: 9, color: '#777' },
 })
 
-function SidebarDoc({ resume: r }: { resume: Resume }) {
+function SidebarDoc({ resume: r, cfg }: { resume: Resume; cfg: TemplateConfig }) {
   const p = r.personalInfo
+  const accent = cfg.accentColor
+  const f = (bold = false) => fontFor(cfg, bold)
+  const sp = (n: number) => pad(cfg, n)
   const initials = p.name ? p.name.split(' ').map(n => n[0]).slice(0, 2).join('') : 'YN'
   const jobTitle = p.summary ? p.summary.split('.')[0] : ''
   return (
     <Document>
-      <Page size="LETTER" style={sb.page}>
+      <Page size="LETTER" style={{ ...sb.page, fontFamily: f() }}>
         {/* Dark sidebar */}
-        <View style={sb.sidebar}>
+        <View style={{ ...sb.sidebar, backgroundColor: accent }}>
           <View style={sb.avatar}><Text style={sb.avatarText}>{initials}</Text></View>
           {/* Contact */}
           <View style={sb.sbSection}>
@@ -376,12 +397,15 @@ const min = StyleSheet.create({
   skill: { fontSize: 9, color: '#555' },
 })
 
-function MinimalDoc({ resume: r }: { resume: Resume }) {
+function MinimalDoc({ resume: r, cfg }: { resume: Resume; cfg: TemplateConfig }) {
   const p = r.personalInfo
+  const accent = cfg.accentColor
+  const f = (bold = false) => fontFor(cfg, bold)
+  const sp = (n: number) => pad(cfg, n)
   return (
     <Document>
-      <Page size="LETTER" style={min.page}>
-        <Text style={min.name}>{p.name || 'Your Name'}</Text>
+      <Page size="LETTER" style={{ ...min.page, fontFamily: f() }}>
+        <Text style={{ ...min.name, fontFamily: f(true) }}>{p.name || 'Your Name'}</Text>
         {p.summary && <Text style={min.title}>{p.summary.split('.')[0]}</Text>}
         <View style={min.contact}>
           {p.email    && <Text>{p.email}</Text>}
@@ -470,12 +494,15 @@ const bld = StyleSheet.create({
   skillRow: { flexDirection: 'row', flexWrap: 'wrap' },
 })
 
-function BoldDoc({ resume: r }: { resume: Resume }) {
+function BoldDoc({ resume: r, cfg }: { resume: Resume; cfg: TemplateConfig }) {
   const p = r.personalInfo
+  const accent = cfg.accentColor
+  const f = (bold = false) => fontFor(cfg, bold)
+  const sp = (n: number) => pad(cfg, n)
   return (
     <Document>
-      <Page size="LETTER" style={bld.page}>
-        <View style={bld.header}>
+      <Page size="LETTER" style={{ ...bld.page, fontFamily: f() }}>
+        <View style={{ ...bld.header, backgroundColor: accent }}>
           <Text style={bld.name}>{p.name || 'Your Name'}</Text>
           {p.summary && <Text style={bld.title}>{p.summary.split('.')[0]}</Text>}
           <View style={bld.contactRow}>
@@ -566,12 +593,15 @@ const cln = StyleSheet.create({
   divider: { borderBottomWidth: 0.5, borderBottomColor: '#e7d5bb', marginBottom: 8 },
 })
 
-function CleanDoc({ resume: r }: { resume: Resume }) {
+function CleanDoc({ resume: r, cfg }: { resume: Resume; cfg: TemplateConfig }) {
   const p = r.personalInfo
+  const accent = cfg.accentColor
+  const f = (bold = false) => fontFor(cfg, bold)
+  const sp = (n: number) => pad(cfg, n)
   return (
     <Document>
-      <Page size="LETTER" style={cln.page}>
-        <View style={cln.header}>
+      <Page size="LETTER" style={{ ...cln.page, fontFamily: f() }}>
+        <View style={{ ...cln.header, borderBottomColor: accent }}>
           <Text style={cln.name}>{p.name || 'Your Name'}</Text>
           {p.summary && <Text style={cln.title}>{p.summary.split('.')[0]}</Text>}
           <View style={cln.contactRow}>
@@ -641,7 +671,7 @@ function CleanDoc({ resume: r }: { resume: Resume }) {
 /* ─────────────────────────────────────────────
    Router
 ───────────────────────────────────────────── */
-const DOCS: Record<TemplateId, React.FC<{ resume: Resume }>> = {
+const DOCS: Record<TemplateId, React.FC<{ resume: Resume; cfg: TemplateConfig }>> = {
   classic: ClassicDoc,
   modern:  ModernDoc,
   minimal: MinimalDoc,
@@ -650,13 +680,29 @@ const DOCS: Record<TemplateId, React.FC<{ resume: Resume }>> = {
   clean:   CleanDoc,
 }
 
+export const TEMPLATE_DEFAULTS: Record<TemplateId, string> = {
+  classic: '#1a1a1a',
+  modern:  '#2a7d7b',
+  minimal: '#374151',
+  bold:    '#5b21b6',
+  sidebar: '#1e2936',
+  clean:   '#b45309',
+}
+
 export default function ResumeDocument({
   resume,
   templateId = 'classic',
+  config,
 }: {
   resume: Resume
   templateId?: TemplateId
+  config?: Partial<TemplateConfig>
 }) {
+  const cfg: TemplateConfig = {
+    accentColor: config?.accentColor ?? TEMPLATE_DEFAULTS[templateId],
+    font: config?.font ?? 'sans',
+    spacing: config?.spacing ?? 'normal',
+  }
   const Doc = DOCS[templateId] ?? ClassicDoc
-  return <Doc resume={resume} />
+  return <Doc resume={resume} cfg={cfg} />
 }

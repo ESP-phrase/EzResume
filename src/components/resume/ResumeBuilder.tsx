@@ -9,7 +9,8 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { generateId } from '@/lib/utils'
 import { TEMPLATES } from '@/lib/templates'
-import type { Resume, Experience, Education, ResumeSection, TemplateId } from '@/types/resume'
+import type { Resume, Experience, Education, ResumeSection, TemplateId, TemplateConfig } from '@/types/resume'
+import { TEMPLATE_DEFAULTS } from '@/components/pdf/ResumeDocument'
 import { Sparkles, Plus, Trash2, ChevronRight, ChevronLeft, Download, Loader2, CheckCircle, User, Briefcase, GraduationCap, Wrench, CreditCard, LayoutTemplate, Save, ArrowLeft } from 'lucide-react'
 import ResumePreview from './ResumePreview'
 import TemplateThumbnail from './TemplateThumbnail'
@@ -47,6 +48,7 @@ export default function ResumeBuilder() {
 
   const [resume, setResume] = useState<Resume>(EMPTY_RESUME)
   const [templateId, setTemplateId] = useState<TemplateId>('classic')
+  const [templateConfig, setTemplateConfig] = useState<TemplateConfig>({ accentColor: TEMPLATE_DEFAULTS['classic'], font: 'sans', spacing: 'normal' })
   const [step, setStep] = useState(0)
   const [enhancing, setEnhancing] = useState<Record<string, boolean>>({})
   const [checkingOut, setCheckingOut] = useState(false)
@@ -61,8 +63,10 @@ export default function ResumeBuilder() {
       .then(data => {
         if (data.resume) {
           const parsed = JSON.parse(data.resume.data)
+          const tid = data.resume.templateId as TemplateId
           setResume(parsed)
-          setTemplateId(data.resume.templateId)
+          setTemplateId(tid)
+          setTemplateConfig(parsed.templateConfig ?? { accentColor: TEMPLATE_DEFAULTS[tid] ?? '#1a1a1a', font: 'sans', spacing: 'normal' })
         }
       })
       .finally(() => setLoading(false))
@@ -75,7 +79,7 @@ export default function ResumeBuilder() {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        data: JSON.stringify(resume),
+        data: JSON.stringify({ ...resume, templateConfig }),
         templateId,
         title: resume.personalInfo.name ? `${resume.personalInfo.name}'s Resume` : 'My Resume',
       }),
@@ -142,7 +146,7 @@ export default function ResumeBuilder() {
   const handleCheckout = async (mode: 'one-time' | 'subscription') => {
     setCheckingOut(true)
     const resumeId = generateId()
-    localStorage.setItem(`resume_${resumeId}`, JSON.stringify({ ...resume, templateId }))
+    localStorage.setItem(`resume_${resumeId}`, JSON.stringify({ ...resume, templateId, templateConfig }))
     try {
       const res = await fetch('/api/stripe/checkout', {
         method: 'POST',
@@ -240,13 +244,14 @@ export default function ResumeBuilder() {
               </p>
             </div>
 
-            {/* Template selector */}
+            {/* Template selector + customizer */}
             {currentStep.key === 'template' && (
+              <div className="space-y-8">
               <div className="grid grid-cols-3 gap-4">
                 {TEMPLATES.map(t => (
                   <button
                     key={t.id}
-                    onClick={() => setTemplateId(t.id)}
+                    onClick={() => { setTemplateId(t.id); setTemplateConfig(c => ({ ...c, accentColor: TEMPLATE_DEFAULTS[t.id] })) }}
                     className={`group rounded-xl overflow-hidden border-2 transition-all ${
                       templateId === t.id
                         ? 'border-amber-500 shadow-lg shadow-amber-500/20'
@@ -265,6 +270,83 @@ export default function ResumeBuilder() {
                     </div>
                   </button>
                 ))}
+              </div>
+
+              {/* ── Customise ── */}
+              <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 space-y-6">
+                <div className="text-stone-100 font-semibold text-sm">Customize</div>
+
+                {/* Color */}
+                <div>
+                  <div className="text-stone-400 text-xs font-medium mb-3">Accent color</div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    {['#1a1a1a','#2a7d7b','#1d4ed8','#5b21b6','#b45309','#be123c','#15803d','#c2410c','#0369a1','#1e2936'].map(color => (
+                      <button
+                        key={color}
+                        onClick={() => setTemplateConfig(c => ({ ...c, accentColor: color }))}
+                        className="w-7 h-7 rounded-full border-2 transition-all"
+                        style={{
+                          backgroundColor: color,
+                          borderColor: templateConfig.accentColor === color ? '#fff' : 'transparent',
+                          boxShadow: templateConfig.accentColor === color ? `0 0 0 2px ${color}` : 'none',
+                        }}
+                      />
+                    ))}
+                    {/* Custom color picker */}
+                    <label className="w-7 h-7 rounded-full border-2 border-dashed border-stone-600 hover:border-stone-400 cursor-pointer flex items-center justify-center transition-colors overflow-hidden relative" title="Custom color">
+                      <input
+                        type="color"
+                        value={templateConfig.accentColor}
+                        onChange={e => setTemplateConfig(c => ({ ...c, accentColor: e.target.value }))}
+                        className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                      />
+                      <span className="text-stone-500 text-xs pointer-events-none">+</span>
+                    </label>
+                    <div className="ml-1 w-7 h-7 rounded-full border border-stone-700" style={{ backgroundColor: templateConfig.accentColor }} />
+                  </div>
+                </div>
+
+                {/* Font */}
+                <div>
+                  <div className="text-stone-400 text-xs font-medium mb-3">Font style</div>
+                  <div className="flex gap-2">
+                    {(['sans', 'serif'] as const).map(f => (
+                      <button
+                        key={f}
+                        onClick={() => setTemplateConfig(c => ({ ...c, font: f }))}
+                        className={`px-4 py-2 rounded-lg text-sm font-medium border transition-all ${
+                          templateConfig.font === f
+                            ? 'bg-amber-500/10 border-amber-500/40 text-amber-400'
+                            : 'border-stone-700 text-stone-400 hover:border-stone-500 hover:text-stone-200'
+                        }`}
+                        style={{ fontFamily: f === 'serif' ? 'Georgia, serif' : 'inherit' }}
+                      >
+                        {f === 'sans' ? 'Modern (Sans)' : 'Classic (Serif)'}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Spacing */}
+                <div>
+                  <div className="text-stone-400 text-xs font-medium mb-3">Spacing</div>
+                  <div className="flex gap-2">
+                    {(['compact', 'normal', 'spacious'] as const).map(sp => (
+                      <button
+                        key={sp}
+                        onClick={() => setTemplateConfig(c => ({ ...c, spacing: sp }))}
+                        className={`px-4 py-2 rounded-lg text-sm capitalize border transition-all ${
+                          templateConfig.spacing === sp
+                            ? 'bg-amber-500/10 border-amber-500/40 text-amber-400'
+                            : 'border-stone-700 text-stone-400 hover:border-stone-500 hover:text-stone-200'
+                        }`}
+                      >
+                        {sp}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
               </div>
             )}
 
