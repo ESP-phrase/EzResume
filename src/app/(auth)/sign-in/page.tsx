@@ -96,20 +96,18 @@ function SignInInner() {
           </div>
 
           <div className="space-y-3">
-            {/* Google */}
-            <button
-              onClick={handleGoogle}
-              disabled={loading !== null}
-              className="w-full h-11 flex items-center justify-center gap-2.5 bg-stone-100 hover:bg-white text-stone-900 font-semibold text-sm rounded-lg border border-stone-200 transition-colors disabled:opacity-50"
+            {/* Demo login */}
+            <a
+              href="/api/demo"
+              className="w-full h-11 flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-sm rounded-lg transition-colors"
             >
-              {loading === 'google' ? <Loader2 className="w-4 h-4 animate-spin" /> : <GoogleIcon />}
-              Continue with Google
-            </button>
+              Demo Login — Enter Dashboard
+            </a>
 
             {/* Divider */}
             <div className="flex items-center gap-3 py-1">
               <div className="flex-1 h-px bg-stone-800" />
-              <span className="text-stone-700 text-xs">or</span>
+              <span className="text-stone-700 text-xs">or sign in with email</span>
               <div className="flex-1 h-px bg-stone-800" />
             </div>
 
