@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react'
 import { signIn } from 'next-auth/react'
 import { useSearchParams } from 'next/navigation'
-import { Loader2, Mail, ArrowRight, CheckCircle } from 'lucide-react'
+import { Loader2, Mail, ArrowRight, CheckCircle, Copy, Check } from 'lucide-react'
 import { Logo } from '@/components/Logo'
 
 function GoogleIcon() {
@@ -25,6 +25,13 @@ function SignInInner() {
   const [mode, setMode] = useState<Mode>('choose')
   const [loading, setLoading] = useState<'google' | 'magic' | 'password' | null>(null)
   const [error, setError] = useState('')
+  const [copied, setCopied] = useState<'email' | 'password' | null>(null)
+
+  function copyText(text: string, field: 'email' | 'password') {
+    navigator.clipboard.writeText(text)
+    setCopied(field)
+    setTimeout(() => setCopied(null), 1500)
+  }
   const searchParams = useSearchParams()
 
   useEffect(() => {
