@@ -1,136 +1,101 @@
 import type { TemplateId } from '@/types/resume'
 
-const SAMPLE = {
-  name: 'Alex Johnson',
-  title: 'Senior Product Manager',
-  email: 'alex@email.com',
-  phone: '(555) 012-3456',
-  location: 'San Francisco, CA',
-  summary: 'Results-driven PM with 6+ years leading cross-functional teams and shipping products used by millions.',
-  exp: [
-    {
-      role: 'Senior Product Manager',
-      company: 'Stripe',
-      date: '2021 – Present',
-      bullets: [
-        'Led 0→1 launch of payments dashboard, driving $2M ARR',
-        'Managed roadmap for 4 engineers and 2 designers',
-        'Reduced onboarding drop-off by 38% via A/B testing',
-      ],
-    },
-    {
-      role: 'Product Manager',
-      company: 'Airbnb',
-      date: '2018 – 2021',
-      bullets: [
-        'Owned host tools product with 800K monthly active users',
-        'Shipped 12 features across web and mobile platforms',
-      ],
-    },
-  ],
-  edu: { school: 'UC Berkeley', degree: 'B.S. Computer Science', date: '2018' },
-  skills: ['Product Strategy', 'Agile', 'SQL', 'Figma', 'Python', 'Roadmapping'],
-}
+const NAME = 'Alex Johnson'
+const TITLE = 'Senior Product Manager'
+const EMAIL = 'alex@email.com'
+const PHONE = '(555) 012-3456'
+const LOC = 'San Francisco, CA'
+const SUMMARY = 'Results-driven PM with 6+ years leading cross-functional teams and shipping products used by millions of users globally.'
+const EXP = [
+  { role: 'Senior Product Manager', company: 'Stripe', date: '2021 – Present', bullets: ['Led 0→1 launch of payments dashboard, driving $2M ARR', 'Reduced onboarding drop-off by 38% via A/B testing', 'Managed roadmap for 4 engineers and 2 designers'] },
+  { role: 'Product Manager', company: 'Airbnb', date: '2018 – 2021', bullets: ['Owned host tools with 800K monthly active users', 'Shipped 12 features across web and mobile'] },
+]
+const EDU = { school: 'UC Berkeley', degree: 'B.S. Computer Science', date: '2018' }
+const SKILLS = ['Product Strategy', 'Agile', 'SQL', 'Figma', 'Python', 'Roadmapping', 'A/B Testing', 'Analytics']
 
-const s = {
-  // font sizes
-  name: { fontSize: 7, fontWeight: 700, lineHeight: 1.2 } as React.CSSProperties,
-  title: { fontSize: 4.5, lineHeight: 1.3 } as React.CSSProperties,
-  contact: { fontSize: 3.5, lineHeight: 1.4 } as React.CSSProperties,
-  sectionHead: { fontSize: 4.5, fontWeight: 700, lineHeight: 1.4, letterSpacing: 0.5, textTransform: 'uppercase' as const },
-  jobTitle: { fontSize: 4.5, fontWeight: 600, lineHeight: 1.3 } as React.CSSProperties,
-  company: { fontSize: 4, lineHeight: 1.3 } as React.CSSProperties,
-  date: { fontSize: 3.5, lineHeight: 1.3 } as React.CSSProperties,
-  bullet: { fontSize: 3.5, lineHeight: 1.5 } as React.CSSProperties,
-  summary: { fontSize: 3.5, lineHeight: 1.6 } as React.CSSProperties,
-  skill: { fontSize: 3.5, lineHeight: 1.3 } as React.CSSProperties,
-}
-
+/* ── Classic: centered uppercase name, bold sections, dark footer ── */
 function ClassicThumb() {
   return (
-    <div style={{ width: '100%', height: '100%', background: '#fff', padding: 8, fontFamily: 'Georgia, serif', display: 'flex', flexDirection: 'column', gap: 3 }}>
-      {/* Header */}
-      <div style={{ textAlign: 'center', marginBottom: 2 }}>
-        <div style={{ ...s.name, color: '#1e293b' }}>{SAMPLE.name}</div>
-        <div style={{ ...s.title, color: '#475569' }}>{SAMPLE.title}</div>
-        <div style={{ ...s.contact, color: '#64748b', marginTop: 1 }}>{SAMPLE.email} · {SAMPLE.phone} · {SAMPLE.location}</div>
+    <div style={{ width: '100%', height: '100%', background: '#fff', fontFamily: 'Georgia, serif', display: 'flex', flexDirection: 'column', paddingBottom: 14, position: 'relative' }}>
+      <div style={{ textAlign: 'center', padding: '8px 8px 4px' }}>
+        <div style={{ fontSize: 7.5, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: '#1a1a1a' }}>{NAME}</div>
+        <div style={{ fontSize: 4.5, color: '#555', marginTop: 1 }}>{TITLE}</div>
+        <div style={{ fontSize: 3.5, color: '#666', marginTop: 2, display: 'flex', justifyContent: 'center', gap: 6 }}>
+          <span>☏ {PHONE}</span><span>✉ {EMAIL}</span><span>⊙ {LOC}</span>
+        </div>
       </div>
-      <div style={{ borderBottom: '1.5px solid #1e293b', marginBottom: 2 }} />
-      {/* Experience */}
-      <div style={{ ...s.sectionHead, color: '#1e293b', borderBottom: '0.5px solid #cbd5e1', paddingBottom: 1, marginBottom: 2 }}>Experience</div>
-      {SAMPLE.exp.map((e, i) => (
-        <div key={i} style={{ marginBottom: 3 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <div style={{ ...s.jobTitle, color: '#1e293b' }}>{e.role}</div>
-            <div style={{ ...s.date, color: '#64748b' }}>{e.date}</div>
-          </div>
-          <div style={{ ...s.company, color: '#475569', marginBottom: 1 }}>{e.company}</div>
-          {e.bullets.map((b, j) => (
-            <div key={j} style={{ display: 'flex', gap: 2, ...s.bullet, color: '#475569' }}>
-              <span style={{ marginTop: 0.5 }}>•</span><span>{b}</span>
+      <div style={{ borderBottom: '1px solid #bbb', margin: '2px 8px 4px' }} />
+      {[
+        { title: 'ABOUT ME', content: <div style={{ fontSize: 3.5, color: '#333', lineHeight: 1.5 }}>{SUMMARY}</div> },
+        { title: 'WORK EXPERIENCE', content: EXP.map((e, i) => (
+          <div key={i} style={{ marginBottom: 3 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: 4, fontWeight: 700 }}>{e.role}</span>
+              <span style={{ fontSize: 3.5, color: '#666' }}>{e.date}</span>
             </div>
-          ))}
+            <div style={{ fontSize: 3.5, color: '#555', marginBottom: 1 }}>{e.company}</div>
+            {e.bullets.slice(0, 2).map((b, j) => <div key={j} style={{ fontSize: 3.2, color: '#444', display: 'flex', gap: 2 }}><span>•</span><span>{b}</span></div>)}
+          </div>
+        )) },
+        { title: 'SKILLS', content: (
+          <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 3 }}>
+            {SKILLS.map((s, i) => <div key={i} style={{ width: '30%', fontSize: 3.5, color: '#333', display: 'flex', gap: 2 }}><span>•</span><span>{s}</span></div>)}
+          </div>
+        )},
+      ].map(({ title, content }) => (
+        <div key={title} style={{ padding: '0 8px', marginBottom: 4 }}>
+          <div style={{ fontSize: 4, fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase', color: '#1a1a1a', borderBottom: '1.5px solid #1a1a1a', paddingBottom: 1, marginBottom: 3 }}>{title}</div>
+          {content}
         </div>
       ))}
-      {/* Education */}
-      <div style={{ ...s.sectionHead, color: '#1e293b', borderBottom: '0.5px solid #cbd5e1', paddingBottom: 1, marginBottom: 2 }}>Education</div>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div>
-          <div style={{ ...s.jobTitle, color: '#1e293b' }}>{SAMPLE.edu.school}</div>
-          <div style={{ ...s.company, color: '#475569' }}>{SAMPLE.edu.degree}</div>
-        </div>
-        <div style={{ ...s.date, color: '#64748b' }}>{SAMPLE.edu.date}</div>
-      </div>
-      {/* Skills */}
-      <div style={{ ...s.sectionHead, color: '#1e293b', borderBottom: '0.5px solid #cbd5e1', paddingBottom: 1, marginTop: 2, marginBottom: 2 }}>Skills</div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-        {SAMPLE.skills.map(sk => (
-          <span key={sk} style={{ ...s.skill, color: '#475569' }}>{sk} ·</span>
-        ))}
-      </div>
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 10, background: '#2d2d2d' }} />
     </div>
   )
 }
 
+/* ── Modern: teal header, left sidebar + main ── */
 function ModernThumb() {
   return (
     <div style={{ width: '100%', height: '100%', background: '#fff', fontFamily: 'Arial, sans-serif', display: 'flex', flexDirection: 'column' }}>
-      {/* Blue header */}
-      <div style={{ background: '#1d4ed8', padding: '8px 8px 6px', marginBottom: 4 }}>
-        <div style={{ ...s.name, color: '#fff' }}>{SAMPLE.name}</div>
-        <div style={{ ...s.title, color: '#bfdbfe', marginTop: 1 }}>{SAMPLE.title}</div>
-        <div style={{ ...s.contact, color: '#93c5fd', marginTop: 2 }}>{SAMPLE.email} · {SAMPLE.phone} · {SAMPLE.location}</div>
+      <div style={{ background: '#2a7d7b', padding: '7px 10px', textAlign: 'center' }}>
+        <div style={{ fontSize: 7.5, fontWeight: 800, color: '#fff', letterSpacing: 1.5, textTransform: 'uppercase' }}>{NAME}</div>
+        <div style={{ fontSize: 4, color: '#d0f0ef', letterSpacing: 1, fontStyle: 'italic', marginTop: 1.5 }}>{TITLE.toUpperCase()}</div>
       </div>
-      <div style={{ padding: '0 8px', display: 'flex', flexDirection: 'column', gap: 3 }}>
-        {/* Summary */}
-        <div>
-          <div style={{ ...s.sectionHead, color: '#1d4ed8', borderBottom: '1px solid #bfdbfe', paddingBottom: 1, marginBottom: 2 }}>Summary</div>
-          <div style={{ ...s.summary, color: '#475569' }}>{SAMPLE.summary}</div>
-        </div>
-        {/* Experience */}
-        <div>
-          <div style={{ ...s.sectionHead, color: '#1d4ed8', borderBottom: '1px solid #bfdbfe', paddingBottom: 1, marginBottom: 2 }}>Experience</div>
-          {SAMPLE.exp.map((e, i) => (
-            <div key={i} style={{ marginBottom: 3 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div style={{ ...s.jobTitle, color: '#1e293b' }}>{e.role} — {e.company}</div>
-                <div style={{ ...s.date, color: '#64748b' }}>{e.date}</div>
-              </div>
-              {e.bullets.slice(0, 2).map((b, j) => (
-                <div key={j} style={{ display: 'flex', gap: 2, ...s.bullet, color: '#475569' }}>
-                  <span style={{ color: '#1d4ed8', fontWeight: 700 }}>›</span><span>{b}</span>
-                </div>
-              ))}
+      <div style={{ display: 'flex', flex: 1 }}>
+        {/* Sidebar */}
+        <div style={{ width: '32%', background: '#f7f7f7', borderRight: '1px solid #e5e5e5', padding: '6px 5px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+          {[
+            { h: 'CONTACT', items: [EMAIL, PHONE, LOC] },
+            { h: 'EDUCATION', items: [EDU.degree, EDU.school, EDU.date] },
+            { h: 'SKILLS', items: SKILLS.slice(0, 5) },
+          ].map(({ h, items }) => (
+            <div key={h}>
+              <div style={{ fontSize: 4, fontWeight: 800, letterSpacing: 0.8, textAlign: 'center', marginBottom: 2 }}>{h}</div>
+              <div style={{ width: 16, height: 1.5, background: '#2a7d7b', margin: '0 auto 3px' }} />
+              {items.map((t, i) => <div key={i} style={{ fontSize: 3.5, color: '#555', textAlign: 'center', lineHeight: 1.5 }}>{t}</div>)}
             </div>
           ))}
         </div>
-        {/* Skills */}
-        <div>
-          <div style={{ ...s.sectionHead, color: '#1d4ed8', borderBottom: '1px solid #bfdbfe', paddingBottom: 1, marginBottom: 2 }}>Skills</div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-            {SAMPLE.skills.map(sk => (
-              <span key={sk} style={{ ...s.skill, background: '#eff6ff', color: '#1d4ed8', padding: '0.5px 3px', borderRadius: 2 }}>{sk}</span>
+        {/* Main */}
+        <div style={{ flex: 1, padding: '6px 7px', display: 'flex', flexDirection: 'column', gap: 5 }}>
+          <div>
+            <div style={{ fontSize: 5, fontWeight: 800, letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 2 }}>Work Experience</div>
+            <div style={{ width: 16, height: 2, background: '#1a1a1a', marginBottom: 4 }} />
+            {EXP.map((e, i) => (
+              <div key={i} style={{ marginBottom: 4 }}>
+                <div style={{ fontSize: 5, fontWeight: 700 }}>{e.role}</div>
+                <div style={{ fontSize: 3.5, color: '#333' }}>{e.company}</div>
+                <div style={{ fontSize: 3.2, color: '#777', marginBottom: 2 }}>{e.date} / {LOC}</div>
+                {e.bullets.slice(0, 2).map((b, j) => <div key={j} style={{ fontSize: 3.2, display: 'flex', gap: 2, color: '#333' }}><span>•</span><span>{b}</span></div>)}
+              </div>
             ))}
+          </div>
+          <div>
+            <div style={{ fontSize: 5, fontWeight: 800, textTransform: 'uppercase', marginBottom: 2 }}>Education</div>
+            <div style={{ width: 16, height: 2, background: '#1a1a1a', marginBottom: 4 }} />
+            <div style={{ fontSize: 4, fontWeight: 700 }}>{EDU.degree}</div>
+            <div style={{ fontSize: 3.5, color: '#555' }}>{EDU.school}</div>
+            <div style={{ fontSize: 3.2, color: '#888' }}>{EDU.date}</div>
           </div>
         </div>
       </div>
@@ -138,196 +103,192 @@ function ModernThumb() {
   )
 }
 
+/* ── Minimal: ultra clean whitespace ── */
 function MinimalThumb() {
   return (
-    <div style={{ width: '100%', height: '100%', background: '#fff', padding: 10, fontFamily: 'Helvetica, sans-serif', display: 'flex', flexDirection: 'column', gap: 4 }}>
-      {/* Header */}
+    <div style={{ width: '100%', height: '100%', background: '#fff', fontFamily: 'Helvetica, sans-serif', padding: '12px 12px 10px', display: 'flex', flexDirection: 'column', gap: 6 }}>
       <div>
-        <div style={{ ...s.name, color: '#111827', fontWeight: 300, fontSize: 8 }}>{SAMPLE.name}</div>
-        <div style={{ ...s.title, color: '#6b7280', fontWeight: 400, marginTop: 1 }}>{SAMPLE.title}</div>
-        <div style={{ ...s.contact, color: '#9ca3af', marginTop: 2 }}>{SAMPLE.email}  {SAMPLE.phone}  {SAMPLE.location}</div>
+        <div style={{ fontSize: 8, fontWeight: 700, color: '#111', letterSpacing: 0.5 }}>{NAME}</div>
+        <div style={{ fontSize: 4.5, color: '#777', marginTop: 1 }}>{TITLE}</div>
+        <div style={{ fontSize: 3.5, color: '#aaa', marginTop: 2, display: 'flex', gap: 8 }}>
+          <span>{EMAIL}</span><span>{PHONE}</span><span>{LOC}</span>
+        </div>
       </div>
-      {/* Experience */}
-      <div>
-        <div style={{ ...s.sectionHead, color: '#9ca3af', fontSize: 3.5, marginBottom: 2 }}>Experience</div>
-        {SAMPLE.exp.map((e, i) => (
-          <div key={i} style={{ marginBottom: 3 }}>
+      {[
+        { label: 'PROFILE', body: <div style={{ fontSize: 3.5, color: '#444', lineHeight: 1.6 }}>{SUMMARY}</div> },
+        { label: 'EXPERIENCE', body: EXP.map((e, i) => (
+          <div key={i} style={{ marginBottom: 4 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <div style={{ ...s.jobTitle, color: '#111827', fontWeight: 500 }}>{e.role}</div>
-              <div style={{ ...s.date, color: '#9ca3af' }}>{e.date}</div>
+              <span style={{ fontSize: 4, fontWeight: 700 }}>{e.role}</span>
+              <span style={{ fontSize: 3.5, color: '#aaa' }}>{e.date}</span>
             </div>
-            <div style={{ ...s.company, color: '#6b7280', marginBottom: 1 }}>{e.company}</div>
-            {e.bullets.slice(0, 2).map((b, j) => (
-              <div key={j} style={{ display: 'flex', gap: 2, ...s.bullet, color: '#6b7280' }}>
-                <span>–</span><span>{b}</span>
-              </div>
-            ))}
+            <div style={{ fontSize: 3.5, color: '#888', marginBottom: 1.5 }}>{e.company}</div>
+            {e.bullets.slice(0, 2).map((b, j) => <div key={j} style={{ fontSize: 3.2, color: '#555', display: 'flex', gap: 2 }}><span style={{ color: '#bbb' }}>–</span><span>{b}</span></div>)}
           </div>
-        ))}
-      </div>
-      {/* Education */}
-      <div>
-        <div style={{ ...s.sectionHead, color: '#9ca3af', fontSize: 3.5, marginBottom: 2 }}>Education</div>
-        <div style={{ ...s.jobTitle, color: '#111827', fontWeight: 500 }}>{SAMPLE.edu.school}</div>
-        <div style={{ ...s.company, color: '#6b7280' }}>{SAMPLE.edu.degree} · {SAMPLE.edu.date}</div>
-      </div>
-      {/* Skills */}
-      <div>
-        <div style={{ ...s.sectionHead, color: '#9ca3af', fontSize: 3.5, marginBottom: 2 }}>Skills</div>
-        <div style={{ ...s.skill, color: '#6b7280' }}>{SAMPLE.skills.join('  ·  ')}</div>
-      </div>
+        ))},
+        { label: 'SKILLS', body: <div style={{ fontSize: 3.5, color: '#666' }}>{SKILLS.join('  ·  ')}</div> },
+      ].map(({ label, body }) => (
+        <div key={label}>
+          <div style={{ fontSize: 3.5, fontWeight: 800, letterSpacing: 2.5, textTransform: 'uppercase', color: '#aaa', marginBottom: 4 }}>{label}</div>
+          {body}
+        </div>
+      ))}
     </div>
   )
 }
 
+/* ── Bold: deep purple header + accent bars ── */
 function BoldThumb() {
   return (
     <div style={{ width: '100%', height: '100%', background: '#fff', fontFamily: 'Arial, sans-serif', display: 'flex', flexDirection: 'column' }}>
-      {/* Purple header */}
-      <div style={{ background: '#7c3aed', padding: '8px 8px 7px' }}>
-        <div style={{ ...s.name, color: '#fff', fontSize: 8 }}>{SAMPLE.name}</div>
-        <div style={{ ...s.title, color: '#ddd6fe', marginTop: 1.5 }}>{SAMPLE.title}</div>
-        <div style={{ ...s.contact, color: '#c4b5fd', marginTop: 2 }}>{SAMPLE.email} · {SAMPLE.location}</div>
+      <div style={{ background: '#5b21b6', padding: '8px 9px 7px' }}>
+        <div style={{ fontSize: 7.5, fontWeight: 800, color: '#fff', letterSpacing: 0.5 }}>{NAME}</div>
+        <div style={{ fontSize: 4, color: '#ddd6fe', marginTop: 1.5 }}>{TITLE}</div>
+        <div style={{ fontSize: 3.5, color: '#c4b5fd', marginTop: 2, display: 'flex', gap: 8 }}><span>{EMAIL}</span><span>{LOC}</span></div>
       </div>
-      <div style={{ padding: '5px 8px', display: 'flex', flexDirection: 'column', gap: 3 }}>
-        {/* Experience */}
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 2, marginBottom: 2 }}>
-            <div style={{ width: 2.5, height: 2.5, background: '#7c3aed', borderRadius: '50%' }} />
-            <div style={{ ...s.sectionHead, color: '#7c3aed', fontSize: 4 }}>Experience</div>
-          </div>
-          {SAMPLE.exp.map((e, i) => (
-            <div key={i} style={{ marginBottom: 3 }}>
+      <div style={{ padding: '6px 9px', display: 'flex', flexDirection: 'column', gap: 5 }}>
+        {[
+          { title: 'SUMMARY', body: <div style={{ fontSize: 3.5, color: '#374151', lineHeight: 1.5 }}>{SUMMARY}</div> },
+          { title: 'EXPERIENCE', body: EXP.map((e, i) => (
+            <div key={i} style={{ marginBottom: 4 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div style={{ ...s.jobTitle, color: '#1e293b' }}>{e.role}</div>
-                <div style={{ ...s.date, color: '#64748b' }}>{e.date}</div>
+                <span style={{ fontSize: 4, fontWeight: 700 }}>{e.role}</span>
+                <span style={{ fontSize: 3.5, color: '#666' }}>{e.date}</span>
               </div>
-              <div style={{ ...s.company, color: '#7c3aed', marginBottom: 1 }}>{e.company}</div>
-              {e.bullets.slice(0, 2).map((b, j) => (
-                <div key={j} style={{ display: 'flex', gap: 2, ...s.bullet, color: '#475569' }}>
-                  <span style={{ color: '#7c3aed', fontWeight: 700, fontSize: 5 }}>▸</span><span>{b}</span>
-                </div>
-              ))}
+              <div style={{ fontSize: 3.5, color: '#5b21b6', marginBottom: 1.5 }}>{e.company}</div>
+              {e.bullets.slice(0, 2).map((b, j) => <div key={j} style={{ fontSize: 3.2, display: 'flex', gap: 2, color: '#374151', paddingLeft: 4 }}><span style={{ color: '#5b21b6' }}>▸</span><span>{b}</span></div>)}
             </div>
-          ))}
-        </div>
-        {/* Skills */}
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 2, marginBottom: 2 }}>
-            <div style={{ width: 2.5, height: 2.5, background: '#7c3aed', borderRadius: '50%' }} />
-            <div style={{ ...s.sectionHead, color: '#7c3aed', fontSize: 4 }}>Skills</div>
+          ))},
+          { title: 'SKILLS', body: (
+            <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 2 }}>
+              {SKILLS.map((s, i) => <span key={i} style={{ fontSize: 3.2, background: '#ede9fe', color: '#5b21b6', padding: '1px 4px', borderRadius: 2 }}>{s}</span>)}
+            </div>
+          )},
+        ].map(({ title, body }) => (
+          <div key={title}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 3, marginBottom: 2 }}>
+              <div style={{ width: 3, height: 9, background: '#5b21b6', borderRadius: 1 }} />
+              <div style={{ fontSize: 4.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.8 }}>{title}</div>
+            </div>
+            <div style={{ borderBottom: '1px solid #ddd6fe', marginBottom: 3 }} />
+            {body}
           </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-            {SAMPLE.skills.map(sk => (
-              <span key={sk} style={{ ...s.skill, background: '#f5f3ff', color: '#7c3aed', padding: '0.5px 3px', borderRadius: 2 }}>{sk}</span>
-            ))}
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   )
 }
 
+/* ── Sidebar: Max Johnson dark navy style ── */
 function SidebarThumb() {
   return (
     <div style={{ width: '100%', height: '100%', background: '#fff', fontFamily: 'Arial, sans-serif', display: 'flex', flexDirection: 'row' }}>
-      {/* Teal sidebar */}
-      <div style={{ width: '38%', background: '#0f766e', padding: '8px 5px', display: 'flex', flexDirection: 'column', gap: 3 }}>
-        {/* Avatar */}
-        <div style={{ width: 18, height: 18, borderRadius: '50%', background: '#2dd4bf', margin: '0 auto 3px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <span style={{ fontSize: 7, color: '#fff', fontWeight: 700 }}>AJ</span>
+      {/* Dark sidebar */}
+      <div style={{ width: '34%', background: '#1e2936', padding: '8px 6px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 5 }}>
+        {/* Avatar circle */}
+        <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#4a9aba', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 3px' }}>
+          <span style={{ fontSize: 9, fontWeight: 800, color: '#fff' }}>AJ</span>
         </div>
-        <div style={{ ...s.name, color: '#fff', fontSize: 5, textAlign: 'center', lineHeight: 1.3 }}>{SAMPLE.name}</div>
-        <div style={{ ...s.title, color: '#99f6e4', textAlign: 'center', fontSize: 3.5 }}>{SAMPLE.title}</div>
-        <div style={{ borderTop: '0.5px solid #2dd4bf', marginTop: 2, paddingTop: 2 }}>
-          <div style={{ ...s.sectionHead, color: '#2dd4bf', fontSize: 3.5, marginBottom: 2 }}>Contact</div>
-          {[SAMPLE.email, SAMPLE.phone, SAMPLE.location].map((c, i) => (
-            <div key={i} style={{ ...s.contact, color: '#99f6e4' }}>{c}</div>
-          ))}
-        </div>
-        <div style={{ borderTop: '0.5px solid #2dd4bf', marginTop: 1, paddingTop: 2 }}>
-          <div style={{ ...s.sectionHead, color: '#2dd4bf', fontSize: 3.5, marginBottom: 2 }}>Skills</div>
-          {SAMPLE.skills.map(sk => (
-            <div key={sk} style={{ ...s.skill, color: '#ccfbf1' }}>· {sk}</div>
-          ))}
-        </div>
-      </div>
-      {/* Main */}
-      <div style={{ flex: 1, padding: '8px 6px', display: 'flex', flexDirection: 'column', gap: 3 }}>
-        <div style={{ ...s.sectionHead, color: '#0f766e', borderBottom: '1px solid #99f6e4', paddingBottom: 1, marginBottom: 2 }}>Experience</div>
-        {SAMPLE.exp.map((e, i) => (
-          <div key={i} style={{ marginBottom: 3 }}>
-            <div style={{ ...s.jobTitle, color: '#1e293b' }}>{e.role}</div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <div style={{ ...s.company, color: '#0f766e' }}>{e.company}</div>
-              <div style={{ ...s.date, color: '#64748b' }}>{e.date}</div>
-            </div>
-            {e.bullets.slice(0, 2).map((b, j) => (
-              <div key={j} style={{ display: 'flex', gap: 2, ...s.bullet, color: '#475569' }}>
-                <span style={{ color: '#0f766e' }}>•</span><span>{b}</span>
+        {[
+          { h: 'Contact', items: [{ label: 'Address', val: LOC }, { label: 'Phone', val: PHONE }, { label: 'Email', val: EMAIL }] },
+          { h: 'Skills', items: SKILLS.slice(0, 5).map(s => ({ label: null, val: s })) },
+        ].map(({ h, items }) => (
+          <div key={h} style={{ width: '100%' }}>
+            <div style={{ fontSize: 5.5, fontWeight: 800, color: '#fff', marginBottom: 2 }}>{h}</div>
+            <div style={{ width: 14, height: 1.5, background: '#fff', marginBottom: 4 }} />
+            {items.map((item, i) => (
+              <div key={i} style={{ marginBottom: 3 }}>
+                {item.label && <div style={{ fontSize: 3.2, fontWeight: 800, color: '#fff' }}>{item.label}</div>}
+                {!item.label && <div style={{ fontSize: 3.2, color: '#b0c4d4', display: 'flex', gap: 2 }}><span>•</span><span>{item.val}</span></div>}
+                {item.label && <div style={{ fontSize: 3.2, color: '#b0c4d4', lineHeight: 1.4 }}>{item.val}</div>}
               </div>
             ))}
           </div>
         ))}
-        <div style={{ ...s.sectionHead, color: '#0f766e', borderBottom: '1px solid #99f6e4', paddingBottom: 1, marginBottom: 2 }}>Education</div>
-        <div style={{ ...s.jobTitle, color: '#1e293b' }}>{SAMPLE.edu.school}</div>
-        <div style={{ ...s.company, color: '#475569' }}>{SAMPLE.edu.degree} · {SAMPLE.edu.date}</div>
+      </div>
+      {/* Main */}
+      <div style={{ flex: 1, padding: '10px 8px', display: 'flex', flexDirection: 'column', gap: 5 }}>
+        <div>
+          <div style={{ fontSize: 7.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 1, color: '#1a1a1a' }}>{NAME}</div>
+          <div style={{ fontSize: 4.5, color: '#555', marginTop: 1.5, marginBottom: 6 }}>{TITLE}</div>
+        </div>
+        {[
+          { h: 'Profile', body: <div style={{ fontSize: 3.5, color: '#444', lineHeight: 1.55 }}>{SUMMARY}</div> },
+          { h: 'Work Experience', body: EXP.map((e, i) => (
+            <div key={i} style={{ marginBottom: 4 }}>
+              <div style={{ fontSize: 4, fontWeight: 700 }}>{e.role}</div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: 3.5, color: '#444' }}>{e.company}</span>
+                <span style={{ fontSize: 3.2, color: '#777' }}>{e.date}</span>
+              </div>
+              {e.bullets.slice(0, 2).map((b, j) => <div key={j} style={{ fontSize: 3.2, display: 'flex', gap: 2, color: '#333' }}><span>•</span><span>{b}</span></div>)}
+            </div>
+          )) },
+          { h: 'Education', body: (
+            <div>
+              <div style={{ fontSize: 4, fontWeight: 700 }}>{EDU.degree}</div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: 3.5, color: '#555' }}>{EDU.school}</span>
+                <span style={{ fontSize: 3.2, color: '#888' }}>{EDU.date}</span>
+              </div>
+            </div>
+          )},
+        ].map(({ h, body }) => (
+          <div key={h}>
+            <div style={{ fontSize: 5, fontWeight: 800, marginBottom: 2 }}>{h}</div>
+            <div style={{ width: 14, height: 2, background: '#1a1a1a', marginBottom: 4 }} />
+            {body}
+          </div>
+        ))}
       </div>
     </div>
   )
 }
 
+/* ── Clean: amber accent, elegant centered header ── */
 function CleanThumb() {
   return (
-    <div style={{ width: '100%', height: '100%', background: '#fff', padding: 8, fontFamily: 'Georgia, serif', display: 'flex', flexDirection: 'column', gap: 3 }}>
-      {/* Centered header */}
-      <div style={{ textAlign: 'center', paddingBottom: 3, borderBottom: '2px solid #b45309' }}>
-        <div style={{ ...s.name, color: '#1c1917', fontSize: 8 }}>{SAMPLE.name}</div>
-        <div style={{ ...s.title, color: '#b45309', marginTop: 1 }}>{SAMPLE.title}</div>
-        <div style={{ ...s.contact, color: '#78716c', marginTop: 1.5 }}>{SAMPLE.email} · {SAMPLE.phone} · {SAMPLE.location}</div>
+    <div style={{ width: '100%', height: '100%', background: '#fff', fontFamily: 'Georgia, serif', padding: '9px 10px', display: 'flex', flexDirection: 'column', gap: 5 }}>
+      <div style={{ textAlign: 'center', borderBottom: '2px solid #b45309', paddingBottom: 5, marginBottom: 2 }}>
+        <div style={{ fontSize: 7.5, fontWeight: 800, color: '#1c1917', letterSpacing: 0.5 }}>{NAME}</div>
+        <div style={{ fontSize: 4.5, color: '#b45309', marginTop: 1.5 }}>{TITLE}</div>
+        <div style={{ fontSize: 3.5, color: '#78716c', marginTop: 2, display: 'flex', justifyContent: 'center', gap: 8 }}><span>{EMAIL}</span><span>{PHONE}</span><span>{LOC}</span></div>
       </div>
-      {/* Summary */}
-      <div>
-        <div style={{ ...s.sectionHead, color: '#b45309', marginBottom: 1.5 }}>Profile</div>
-        <div style={{ ...s.summary, color: '#57534e' }}>{SAMPLE.summary}</div>
-      </div>
-      {/* Experience */}
-      <div>
-        <div style={{ ...s.sectionHead, color: '#b45309', marginBottom: 1.5 }}>Experience</div>
-        {SAMPLE.exp.map((e, i) => (
-          <div key={i} style={{ marginBottom: 3 }}>
+      {[
+        { h: 'PROFILE', body: <div style={{ fontSize: 3.5, color: '#57534e', lineHeight: 1.6 }}>{SUMMARY}</div> },
+        { h: 'EXPERIENCE', body: EXP.map((e, i) => (
+          <div key={i} style={{ marginBottom: 4 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <div style={{ ...s.jobTitle, color: '#1c1917' }}>{e.role} · {e.company}</div>
-              <div style={{ ...s.date, color: '#78716c' }}>{e.date}</div>
+              <span style={{ fontSize: 4, fontWeight: 700 }}>{e.role}</span>
+              <span style={{ fontSize: 3.2, color: '#78716c' }}>{e.date}</span>
             </div>
-            {e.bullets.slice(0, 2).map((b, j) => (
-              <div key={j} style={{ display: 'flex', gap: 2, ...s.bullet, color: '#57534e' }}>
-                <span style={{ color: '#b45309' }}>▪</span><span>{b}</span>
-              </div>
-            ))}
+            <div style={{ fontSize: 3.5, color: '#57534e', marginBottom: 1.5 }}>{e.company}</div>
+            {e.bullets.slice(0, 2).map((b, j) => <div key={j} style={{ fontSize: 3.2, display: 'flex', gap: 2, color: '#44403c' }}><span style={{ color: '#b45309' }}>▪</span><span>{b}</span></div>)}
           </div>
-        ))}
-      </div>
-      {/* Skills */}
-      <div>
-        <div style={{ ...s.sectionHead, color: '#b45309', marginBottom: 1.5 }}>Skills</div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-          {SAMPLE.skills.map(sk => (
-            <span key={sk} style={{ ...s.skill, color: '#57534e', border: '0.5px solid #d6d3d1', padding: '0.5px 3px', borderRadius: 2 }}>{sk}</span>
-          ))}
+        ))},
+        { h: 'SKILLS', body: (
+          <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 2 }}>
+            {SKILLS.map((s, i) => <span key={i} style={{ fontSize: 3.2, border: '0.5px solid #e7d5bb', color: '#57534e', padding: '1px 4px', borderRadius: 8 }}>{s}</span>)}
+          </div>
+        )},
+      ].map(({ h, body }) => (
+        <div key={h}>
+          <div style={{ fontSize: 4, fontWeight: 800, letterSpacing: 1.2, textTransform: 'uppercase', color: '#b45309', marginBottom: 2 }}>{h}</div>
+          <div style={{ borderBottom: '0.5px solid #e7d5bb', marginBottom: 3 }} />
+          {body}
         </div>
-      </div>
+      ))}
     </div>
   )
 }
 
 const THUMBS: Record<TemplateId, React.FC> = {
   classic: ClassicThumb,
-  modern: ModernThumb,
+  modern:  ModernThumb,
   minimal: MinimalThumb,
-  bold: BoldThumb,
+  bold:    BoldThumb,
   sidebar: SidebarThumb,
-  clean: CleanThumb,
+  clean:   CleanThumb,
 }
 
 export default function TemplateThumbnail({ id }: { id: TemplateId }) {

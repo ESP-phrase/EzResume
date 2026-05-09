@@ -4,392 +4,222 @@ import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer'
 import type { Resume, TemplateId } from '@/types/resume'
 
 /* ─────────────────────────────────────────────
-   CLASSIC  — centered header, bold uppercase sections, dark footer
+   CLASSIC — Sebastian Bennett style
+   Centered uppercase name · bold section headers · dark footer
 ───────────────────────────────────────────── */
-const classicStyles = StyleSheet.create({
-  page: { fontFamily: 'Helvetica', fontSize: 10, color: '#1a1a1a', paddingBottom: 32 },
-  // Header
-  header: { alignItems: 'center', paddingHorizontal: 48, paddingTop: 36, paddingBottom: 12 },
-  name: { fontSize: 26, fontFamily: 'Helvetica-Bold', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 4 },
+const cls = StyleSheet.create({
+  page: { fontFamily: 'Helvetica', fontSize: 10, color: '#1a1a1a', paddingBottom: 28 },
+  header: { alignItems: 'center', paddingHorizontal: 48, paddingTop: 36, paddingBottom: 10 },
+  name: { fontSize: 26, fontFamily: 'Helvetica-Bold', textTransform: 'uppercase', letterSpacing: 2.5, marginBottom: 5 },
   jobTitle: { fontSize: 12, color: '#444', marginBottom: 10 },
-  contactRow: { flexDirection: 'row', justifyContent: 'center', gap: 20, fontSize: 9, color: '#555' },
-  contactItem: { flexDirection: 'row', alignItems: 'center', gap: 3 },
-  divider: { borderBottomWidth: 1, borderBottomColor: '#ccc', marginHorizontal: 48, marginBottom: 14 },
-  // Body
+  contactRow: { flexDirection: 'row', justifyContent: 'center', gap: 18, fontSize: 9, color: '#555' },
+  headerDivider: { borderBottomWidth: 1, borderBottomColor: '#bbb', marginHorizontal: 48, marginBottom: 14 },
   body: { paddingHorizontal: 48 },
-  section: { marginBottom: 14 },
-  sectionTitle: { fontSize: 11, fontFamily: 'Helvetica-Bold', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 3 },
-  sectionDivider: { borderBottomWidth: 1, borderBottomColor: '#1a1a1a', marginBottom: 8 },
-  // Entry
-  entryMeta: { fontSize: 9, color: '#666', marginBottom: 2 },
+  section: { marginBottom: 13 },
+  sectionHead: { fontSize: 11, fontFamily: 'Helvetica-Bold', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 3 },
+  sectionLine: { borderBottomWidth: 1.5, borderBottomColor: '#1a1a1a', marginBottom: 8 },
+  entryMeta: { fontSize: 9, color: '#666', marginBottom: 1.5 },
   entryTitle: { fontSize: 10, fontFamily: 'Helvetica-Bold', marginBottom: 3 },
-  entryBody: { fontSize: 9.5, color: '#333', lineHeight: 1.5, marginBottom: 6 },
+  para: { fontSize: 9.5, color: '#333', lineHeight: 1.55 },
+  row: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 1.5 },
   bullet: { flexDirection: 'row', marginBottom: 2.5 },
-  bulletDot: { marginRight: 5, color: '#444' },
+  dot: { marginRight: 5 },
   bulletText: { flex: 1, fontSize: 9.5, color: '#333', lineHeight: 1.4 },
-  // Skills grid
   skillsGrid: { flexDirection: 'row', flexWrap: 'wrap' },
-  skillCol: { width: '33%' },
-  skillItem: { flexDirection: 'row', marginBottom: 3, fontSize: 9.5 },
-  // Footer bar
-  footer: { position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: '#2d2d2d', height: 22 },
+  skillCol: { width: '33%', flexDirection: 'row', marginBottom: 3 },
+  footer: { position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: '#2d2d2d', height: 20 },
 })
 
-function ClassicDocument({ resume }: { resume: Resume }) {
-  const { personalInfo: p, experience, education, skills } = resume
+function ClassicDoc({ resume: r }: { resume: Resume }) {
+  const p = r.personalInfo
   return (
     <Document>
-      <Page size="LETTER" style={classicStyles.page}>
-        {/* Header */}
-        <View style={classicStyles.header}>
-          <Text style={classicStyles.name}>{p.name || 'Your Name'}</Text>
-          {p.summary && <Text style={classicStyles.jobTitle}>{p.summary.split('.')[0]}</Text>}
-          <View style={classicStyles.contactRow}>
-            {p.phone && <Text style={classicStyles.contactItem}>☏ {p.phone}</Text>}
-            {p.email && <Text style={classicStyles.contactItem}>✉ {p.email}</Text>}
-            {p.location && <Text style={classicStyles.contactItem}>⊙ {p.location}</Text>}
-            {p.linkedin && <Text style={classicStyles.contactItem}>in {p.linkedin}</Text>}
+      <Page size="LETTER" style={cls.page}>
+        <View style={cls.header}>
+          <Text style={cls.name}>{p.name || 'Your Name'}</Text>
+          {p.summary && <Text style={cls.jobTitle}>{p.summary.split('.')[0]}</Text>}
+          <View style={cls.contactRow}>
+            {p.phone    && <Text>☏ {p.phone}</Text>}
+            {p.email    && <Text>✉ {p.email}</Text>}
+            {p.location && <Text>⊙ {p.location}</Text>}
+            {p.linkedin && <Text>in {p.linkedin}</Text>}
           </View>
         </View>
-        <View style={classicStyles.divider} />
-
-        <View style={classicStyles.body}>
-          {/* About / Summary */}
+        <View style={cls.headerDivider} />
+        <View style={cls.body}>
           {p.summary && (
-            <View style={classicStyles.section}>
-              <Text style={classicStyles.sectionTitle}>About Me</Text>
-              <View style={classicStyles.sectionDivider} />
-              <Text style={{ fontSize: 9.5, color: '#333', lineHeight: 1.6 }}>{p.summary}</Text>
+            <View style={cls.section}>
+              <Text style={cls.sectionHead}>About Me</Text>
+              <View style={cls.sectionLine} />
+              <Text style={cls.para}>{p.summary}</Text>
             </View>
           )}
-
-          {/* Education */}
-          {education.length > 0 && (
-            <View style={classicStyles.section}>
-              <Text style={classicStyles.sectionTitle}>Education</Text>
-              <View style={classicStyles.sectionDivider} />
-              {education.map((edu) => (
-                <View key={edu.id} style={{ marginBottom: 8 }}>
-                  <Text style={classicStyles.entryMeta}>{edu.school}{edu.graduationDate ? ` | ${edu.graduationDate}` : ''}</Text>
-                  <Text style={classicStyles.entryTitle}>{edu.degree}{edu.field ? ` in ${edu.field}` : ''}</Text>
-                  {edu.gpa ? <Text style={classicStyles.entryBody}>GPA: {edu.gpa}</Text> : null}
+          {r.education.length > 0 && (
+            <View style={cls.section}>
+              <Text style={cls.sectionHead}>Education</Text>
+              <View style={cls.sectionLine} />
+              {r.education.map(e => (
+                <View key={e.id} style={{ marginBottom: 7 }}>
+                  <Text style={cls.entryMeta}>{e.school}{e.graduationDate ? ` | ${e.graduationDate}` : ''}</Text>
+                  <Text style={cls.entryTitle}>{e.degree}{e.field ? ` in ${e.field}` : ''}</Text>
                 </View>
               ))}
             </View>
           )}
-
-          {/* Work Experience */}
-          {experience.length > 0 && (
-            <View style={classicStyles.section}>
-              <Text style={classicStyles.sectionTitle}>Work Experience</Text>
-              <View style={classicStyles.sectionDivider} />
-              {experience.map((exp) => (
-                <View key={exp.id} style={{ marginBottom: 10 }}>
-                  <Text style={classicStyles.entryMeta}>
-                    {exp.company}{exp.startDate ? ` | ${exp.startDate} - ${exp.current ? 'Present' : exp.endDate}` : ''}
-                  </Text>
-                  <Text style={classicStyles.entryTitle}>{exp.title}</Text>
-                  {exp.bullets.filter(Boolean).map((b, i) => (
-                    <View key={i} style={classicStyles.bullet}>
-                      <Text style={classicStyles.bulletDot}>•</Text>
-                      <Text style={classicStyles.bulletText}>{b}</Text>
+          {r.experience.length > 0 && (
+            <View style={cls.section}>
+              <Text style={cls.sectionHead}>Work Experience</Text>
+              <View style={cls.sectionLine} />
+              {r.experience.map(e => (
+                <View key={e.id} style={{ marginBottom: 9 }}>
+                  <Text style={cls.entryMeta}>{e.company}{e.startDate ? ` | ${e.startDate} – ${e.current ? 'Present' : e.endDate}` : ''}</Text>
+                  <Text style={cls.entryTitle}>{e.title}</Text>
+                  {e.bullets.filter(Boolean).map((b, i) => (
+                    <View key={i} style={cls.bullet}>
+                      <Text style={cls.dot}>•</Text>
+                      <Text style={cls.bulletText}>{b}</Text>
                     </View>
                   ))}
                 </View>
               ))}
             </View>
           )}
-
-          {/* Skills */}
-          {skills.length > 0 && (
-            <View style={classicStyles.section}>
-              <Text style={classicStyles.sectionTitle}>Skills</Text>
-              <View style={classicStyles.sectionDivider} />
-              <View style={classicStyles.skillsGrid}>
-                {skills.map((sk) => (
-                  <View key={sk.id} style={classicStyles.skillCol}>
-                    <View style={classicStyles.skillItem}>
-                      <Text style={{ marginRight: 4 }}>•</Text>
-                      <Text>{sk.name}</Text>
-                    </View>
+          {r.skills.length > 0 && (
+            <View style={cls.section}>
+              <Text style={cls.sectionHead}>Skills</Text>
+              <View style={cls.sectionLine} />
+              <View style={cls.skillsGrid}>
+                {r.skills.map(s => (
+                  <View key={s.id} style={cls.skillCol}>
+                    <Text style={{ marginRight: 4 }}>•</Text>
+                    <Text style={{ fontSize: 9.5 }}>{s.name}</Text>
                   </View>
                 ))}
               </View>
             </View>
           )}
         </View>
-
-        {/* Dark footer bar */}
-        <View style={classicStyles.footer} fixed />
+        <View style={cls.footer} fixed />
       </Page>
     </Document>
   )
 }
 
 /* ─────────────────────────────────────────────
-   MODERN  — blue header bar, sharp sections
+   MODERN — Renata Voss style
+   Teal full-width header · left sidebar · main content
 ───────────────────────────────────────────── */
-const modernStyles = StyleSheet.create({
-  page: { fontFamily: 'Helvetica', fontSize: 10, color: '#1a1a1a' },
-  header: { backgroundColor: '#1d4ed8', paddingHorizontal: 40, paddingVertical: 24 },
-  name: { fontSize: 22, fontFamily: 'Helvetica-Bold', color: '#fff', marginBottom: 3 },
-  title: { fontSize: 11, color: '#bfdbfe', marginBottom: 8 },
-  contactRow: { flexDirection: 'row', gap: 16, fontSize: 9, color: '#93c5fd' },
-  body: { paddingHorizontal: 40, paddingTop: 18 },
-  section: { marginBottom: 14 },
-  sectionTitle: { fontSize: 11, fontFamily: 'Helvetica-Bold', color: '#1d4ed8', textTransform: 'uppercase', letterSpacing: 1, borderBottomWidth: 1, borderBottomColor: '#bfdbfe', paddingBottom: 3, marginBottom: 8 },
-  entryHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 },
-  entryTitle: { fontFamily: 'Helvetica-Bold', fontSize: 10 },
-  entryCompany: { color: '#1d4ed8', fontSize: 9, marginBottom: 3 },
-  entryDate: { color: '#64748b', fontSize: 9 },
-  bullet: { flexDirection: 'row', marginBottom: 2.5, paddingLeft: 8 },
-  bulletDot: { marginRight: 5, color: '#1d4ed8', fontFamily: 'Helvetica-Bold' },
-  bulletText: { flex: 1, lineHeight: 1.4 },
-  skillBadge: { backgroundColor: '#eff6ff', color: '#1d4ed8', fontSize: 9, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 3, marginRight: 5, marginBottom: 5 },
-  skillsRow: { flexDirection: 'row', flexWrap: 'wrap' },
+const mod = StyleSheet.create({
+  page: { fontFamily: 'Helvetica', fontSize: 10, color: '#1a1a1a', flexDirection: 'column' },
+  topBar: { backgroundColor: '#2a7d7b', paddingVertical: 22, paddingHorizontal: 40, alignItems: 'center' },
+  topName: { fontSize: 28, fontFamily: 'Helvetica-Bold', color: '#fff', letterSpacing: 3, textTransform: 'uppercase', marginBottom: 5 },
+  topTitle: { fontSize: 11, color: '#d0f0ef', letterSpacing: 1.5, fontStyle: 'italic' },
+  body: { flexDirection: 'row', flex: 1 },
+  sidebar: { width: 160, backgroundColor: '#f7f7f7', borderRightWidth: 1, borderRightColor: '#e5e5e5', padding: 20 },
+  sideSection: { marginBottom: 16 },
+  sideHead: { fontSize: 10, fontFamily: 'Helvetica-Bold', textTransform: 'uppercase', letterSpacing: 1.2, marginBottom: 4, textAlign: 'center' },
+  sideLine: { borderBottomWidth: 1.5, borderBottomColor: '#2a7d7b', marginBottom: 8, width: 30, alignSelf: 'center' },
+  sideText: { fontSize: 9, color: '#444', textAlign: 'center', lineHeight: 1.5, marginBottom: 2 },
+  sideLink: { fontSize: 9, color: '#2a7d7b', textAlign: 'center', marginBottom: 2 },
+  sideBullet: { fontSize: 9, color: '#444', textAlign: 'center', marginBottom: 2 },
+  main: { flex: 1, padding: 24 },
+  mainSection: { marginBottom: 16 },
+  mainHead: { fontSize: 13, fontFamily: 'Helvetica-Bold', textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 3 },
+  mainLine: { borderBottomWidth: 2, borderBottomColor: '#1a1a1a', width: 32, marginBottom: 10 },
+  entryJobTitle: { fontSize: 13, fontFamily: 'Helvetica-Bold', marginBottom: 2 },
+  entryCompany: { fontSize: 10, color: '#333', marginBottom: 1 },
+  entryMeta: { fontSize: 9, color: '#666', marginBottom: 5 },
+  bullet: { flexDirection: 'row', marginBottom: 3 },
+  dot: { marginRight: 5, color: '#333' },
+  bulletText: { flex: 1, fontSize: 9.5, lineHeight: 1.45, color: '#222' },
+  eduTitle: { fontSize: 10, fontFamily: 'Helvetica-Bold', marginBottom: 1 },
+  eduSub: { fontSize: 9, color: '#555', marginBottom: 1 },
+  eduMeta: { fontSize: 9, color: '#888' },
 })
 
-function ModernDocument({ resume }: { resume: Resume }) {
-  const { personalInfo: p, experience, education, skills } = resume
+function ModernDoc({ resume: r }: { resume: Resume }) {
+  const p = r.personalInfo
+  const title = p.summary ? p.summary.split('.')[0] : ''
   return (
     <Document>
-      <Page size="LETTER" style={modernStyles.page}>
-        <View style={modernStyles.header}>
-          <Text style={modernStyles.name}>{p.name || 'Your Name'}</Text>
-          {p.summary && <Text style={modernStyles.title}>{p.summary.split('.')[0]}</Text>}
-          <View style={modernStyles.contactRow}>
-            {p.email && <Text>{p.email}</Text>}
-            {p.phone && <Text>{p.phone}</Text>}
-            {p.location && <Text>{p.location}</Text>}
-          </View>
+      <Page size="LETTER" style={mod.page}>
+        {/* Teal header */}
+        <View style={mod.topBar}>
+          <Text style={mod.topName}>{p.name || 'Your Name'}</Text>
+          {title && <Text style={mod.topTitle}>{title.toUpperCase()}</Text>}
         </View>
-        <View style={modernStyles.body}>
-          {p.summary && (
-            <View style={modernStyles.section}>
-              <Text style={modernStyles.sectionTitle}>Summary</Text>
-              <Text style={{ fontSize: 9.5, lineHeight: 1.5, color: '#374151' }}>{p.summary}</Text>
+        <View style={mod.body}>
+          {/* Left sidebar */}
+          <View style={mod.sidebar}>
+            <View style={mod.sideSection}>
+              <Text style={mod.sideHead}>Contact</Text>
+              <View style={mod.sideLine} />
+              {p.email    && <Text style={mod.sideText}>{p.email}</Text>}
+              {p.phone    && <Text style={mod.sideText}>{p.phone}</Text>}
+              {p.location && <Text style={mod.sideText}>{p.location}</Text>}
+              {p.linkedin && <Text style={mod.sideLink}>{p.linkedin}</Text>}
+              {p.website  && <Text style={mod.sideLink}>{p.website}</Text>}
             </View>
-          )}
-          {experience.length > 0 && (
-            <View style={modernStyles.section}>
-              <Text style={modernStyles.sectionTitle}>Experience</Text>
-              {experience.map(exp => (
-                <View key={exp.id} style={{ marginBottom: 10 }}>
-                  <View style={modernStyles.entryHeader}>
-                    <Text style={modernStyles.entryTitle}>{exp.title}</Text>
-                    <Text style={modernStyles.entryDate}>{exp.startDate} – {exp.current ? 'Present' : exp.endDate}</Text>
-                  </View>
-                  <Text style={modernStyles.entryCompany}>{exp.company}</Text>
-                  {exp.bullets.filter(Boolean).map((b, i) => (
-                    <View key={i} style={modernStyles.bullet}>
-                      <Text style={modernStyles.bulletDot}>›</Text>
-                      <Text style={modernStyles.bulletText}>{b}</Text>
-                    </View>
-                  ))}
-                </View>
-              ))}
-            </View>
-          )}
-          {education.length > 0 && (
-            <View style={modernStyles.section}>
-              <Text style={modernStyles.sectionTitle}>Education</Text>
-              {education.map(edu => (
-                <View key={edu.id} style={{ marginBottom: 6 }}>
-                  <View style={modernStyles.entryHeader}>
-                    <Text style={modernStyles.entryTitle}>{edu.school}</Text>
-                    <Text style={modernStyles.entryDate}>{edu.graduationDate}</Text>
-                  </View>
-                  <Text style={{ fontSize: 9, color: '#475569' }}>{edu.degree}{edu.field ? `, ${edu.field}` : ''}</Text>
-                </View>
-              ))}
-            </View>
-          )}
-          {skills.length > 0 && (
-            <View style={modernStyles.section}>
-              <Text style={modernStyles.sectionTitle}>Skills</Text>
-              <View style={modernStyles.skillsRow}>
-                {skills.map(sk => <Text key={sk.id} style={modernStyles.skillBadge}>{sk.name}</Text>)}
-              </View>
-            </View>
-          )}
-        </View>
-      </Page>
-    </Document>
-  )
-}
-
-/* ─────────────────────────────────────────────
-   MINIMAL  — ultra clean, lots of whitespace
-───────────────────────────────────────────── */
-const minimalStyles = StyleSheet.create({
-  page: { fontFamily: 'Helvetica', fontSize: 10, color: '#111827', padding: 52 },
-  name: { fontSize: 24, fontFamily: 'Helvetica-Bold', fontWeight: 300, marginBottom: 3 },
-  title: { fontSize: 11, color: '#6b7280', marginBottom: 6 },
-  contactRow: { flexDirection: 'row', gap: 14, fontSize: 9, color: '#9ca3af', marginBottom: 24 },
-  section: { marginBottom: 18 },
-  sectionTitle: { fontSize: 8, fontFamily: 'Helvetica-Bold', textTransform: 'uppercase', letterSpacing: 2, color: '#9ca3af', marginBottom: 8 },
-  entryHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 1 },
-  entryTitle: { fontFamily: 'Helvetica-Bold', fontSize: 10, color: '#111827' },
-  entryCompany: { color: '#6b7280', fontSize: 9, marginBottom: 3 },
-  entryDate: { color: '#9ca3af', fontSize: 9 },
-  bullet: { flexDirection: 'row', marginBottom: 2.5 },
-  bulletDot: { marginRight: 6, color: '#9ca3af' },
-  bulletText: { flex: 1, lineHeight: 1.5, color: '#374151' },
-  skillsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 4 },
-  skillItem: { fontSize: 9, color: '#6b7280' },
-})
-
-function MinimalDocument({ resume }: { resume: Resume }) {
-  const { personalInfo: p, experience, education, skills } = resume
-  return (
-    <Document>
-      <Page size="LETTER" style={minimalStyles.page}>
-        <Text style={minimalStyles.name}>{p.name || 'Your Name'}</Text>
-        {p.summary && <Text style={minimalStyles.title}>{p.summary.split('.')[0]}</Text>}
-        <View style={minimalStyles.contactRow}>
-          {p.email && <Text>{p.email}</Text>}
-          {p.phone && <Text>{p.phone}</Text>}
-          {p.location && <Text>{p.location}</Text>}
-        </View>
-        {p.summary && (
-          <View style={minimalStyles.section}>
-            <Text style={minimalStyles.sectionTitle}>Profile</Text>
-            <Text style={{ fontSize: 9.5, lineHeight: 1.6, color: '#374151' }}>{p.summary}</Text>
-          </View>
-        )}
-        {experience.length > 0 && (
-          <View style={minimalStyles.section}>
-            <Text style={minimalStyles.sectionTitle}>Experience</Text>
-            {experience.map(exp => (
-              <View key={exp.id} style={{ marginBottom: 10 }}>
-                <View style={minimalStyles.entryHeader}>
-                  <Text style={minimalStyles.entryTitle}>{exp.title}</Text>
-                  <Text style={minimalStyles.entryDate}>{exp.startDate} – {exp.current ? 'Present' : exp.endDate}</Text>
-                </View>
-                <Text style={minimalStyles.entryCompany}>{exp.company}</Text>
-                {exp.bullets.filter(Boolean).map((b, i) => (
-                  <View key={i} style={minimalStyles.bullet}>
-                    <Text style={minimalStyles.bulletDot}>–</Text>
-                    <Text style={minimalStyles.bulletText}>{b}</Text>
+            {r.education.length > 0 && (
+              <View style={mod.sideSection}>
+                <Text style={mod.sideHead}>Education</Text>
+                <View style={mod.sideLine} />
+                {r.education.map(e => (
+                  <View key={e.id} style={{ marginBottom: 8 }}>
+                    <Text style={{ ...mod.sideText, fontFamily: 'Helvetica-Bold', color: '#222' }}>{e.degree}</Text>
+                    {e.field ? <Text style={mod.sideText}>{e.field}</Text> : null}
+                    <Text style={mod.sideText}>{e.school}</Text>
+                    <Text style={{ ...mod.sideText, color: '#888' }}>{e.graduationDate}</Text>
+                    {p.location ? <Text style={mod.sideText}>{p.location}</Text> : null}
                   </View>
                 ))}
               </View>
-            ))}
-          </View>
-        )}
-        {education.length > 0 && (
-          <View style={minimalStyles.section}>
-            <Text style={minimalStyles.sectionTitle}>Education</Text>
-            {education.map(edu => (
-              <View key={edu.id} style={{ marginBottom: 6 }}>
-                <View style={minimalStyles.entryHeader}>
-                  <Text style={minimalStyles.entryTitle}>{edu.school}</Text>
-                  <Text style={minimalStyles.entryDate}>{edu.graduationDate}</Text>
-                </View>
-                <Text style={minimalStyles.entryCompany}>{edu.degree}{edu.field ? `, ${edu.field}` : ''}</Text>
+            )}
+            {r.skills.length > 0 && (
+              <View style={mod.sideSection}>
+                <Text style={mod.sideHead}>Skills</Text>
+                <View style={mod.sideLine} />
+                {r.skills.map(s => <Text key={s.id} style={mod.sideBullet}>{s.name}</Text>)}
               </View>
-            ))}
+            )}
           </View>
-        )}
-        {skills.length > 0 && (
-          <View style={minimalStyles.section}>
-            <Text style={minimalStyles.sectionTitle}>Skills</Text>
-            <Text style={{ fontSize: 9.5, color: '#6b7280', lineHeight: 1.8 }}>{skills.map(s => s.name).join('  ·  ')}</Text>
-          </View>
-        )}
-      </Page>
-    </Document>
-  )
-}
-
-/* ─────────────────────────────────────────────
-   BOLD  — purple header, strong typography
-───────────────────────────────────────────── */
-const boldStyles = StyleSheet.create({
-  page: { fontFamily: 'Helvetica', fontSize: 10, color: '#1a1a1a' },
-  header: { backgroundColor: '#7c3aed', paddingHorizontal: 40, paddingVertical: 26 },
-  name: { fontSize: 24, fontFamily: 'Helvetica-Bold', color: '#fff', marginBottom: 3 },
-  title: { fontSize: 11, color: '#ddd6fe', marginBottom: 8 },
-  contactRow: { flexDirection: 'row', gap: 14, fontSize: 9, color: '#c4b5fd' },
-  body: { paddingHorizontal: 40, paddingTop: 18 },
-  sectionRow: { flexDirection: 'row', alignItems: 'center', gap: 5, marginBottom: 8 },
-  dot: { width: 5, height: 5, backgroundColor: '#7c3aed', borderRadius: 3 },
-  sectionTitle: { fontSize: 11, fontFamily: 'Helvetica-Bold', color: '#7c3aed', textTransform: 'uppercase', letterSpacing: 1 },
-  section: { marginBottom: 14 },
-  entryHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 1 },
-  entryTitle: { fontFamily: 'Helvetica-Bold', fontSize: 10 },
-  entryCompany: { color: '#7c3aed', fontSize: 9, marginBottom: 3 },
-  entryDate: { color: '#64748b', fontSize: 9 },
-  bullet: { flexDirection: 'row', marginBottom: 2.5, paddingLeft: 8 },
-  bulletDot: { marginRight: 5, color: '#7c3aed', fontFamily: 'Helvetica-Bold', fontSize: 11 },
-  bulletText: { flex: 1, lineHeight: 1.4 },
-  skillBadge: { backgroundColor: '#f5f3ff', color: '#7c3aed', fontSize: 9, paddingHorizontal: 7, paddingVertical: 2, borderRadius: 3, marginRight: 4, marginBottom: 4 },
-  skillsRow: { flexDirection: 'row', flexWrap: 'wrap' },
-})
-
-function BoldDocument({ resume }: { resume: Resume }) {
-  const { personalInfo: p, experience, education, skills } = resume
-  return (
-    <Document>
-      <Page size="LETTER" style={boldStyles.page}>
-        <View style={boldStyles.header}>
-          <Text style={boldStyles.name}>{p.name || 'Your Name'}</Text>
-          {p.summary && <Text style={boldStyles.title}>{p.summary.split('.')[0]}</Text>}
-          <View style={boldStyles.contactRow}>
-            {p.email && <Text>{p.email}</Text>}
-            {p.phone && <Text>{p.phone}</Text>}
-            {p.location && <Text>{p.location}</Text>}
-          </View>
-        </View>
-        <View style={boldStyles.body}>
-          {p.summary && (
-            <View style={boldStyles.section}>
-              <View style={boldStyles.sectionRow}><View style={boldStyles.dot} /><Text style={boldStyles.sectionTitle}>Summary</Text></View>
-              <Text style={{ fontSize: 9.5, lineHeight: 1.5, color: '#374151' }}>{p.summary}</Text>
-            </View>
-          )}
-          {experience.length > 0 && (
-            <View style={boldStyles.section}>
-              <View style={boldStyles.sectionRow}><View style={boldStyles.dot} /><Text style={boldStyles.sectionTitle}>Experience</Text></View>
-              {experience.map(exp => (
-                <View key={exp.id} style={{ marginBottom: 10 }}>
-                  <View style={boldStyles.entryHeader}>
-                    <Text style={boldStyles.entryTitle}>{exp.title}</Text>
-                    <Text style={boldStyles.entryDate}>{exp.startDate} – {exp.current ? 'Present' : exp.endDate}</Text>
+          {/* Main */}
+          <View style={mod.main}>
+            {r.experience.length > 0 && (
+              <View style={mod.mainSection}>
+                <Text style={mod.mainHead}>Work Experience</Text>
+                <View style={mod.mainLine} />
+                {r.experience.map(e => (
+                  <View key={e.id} style={{ marginBottom: 12 }}>
+                    <Text style={mod.entryJobTitle}>{e.title}</Text>
+                    <Text style={mod.entryCompany}>{e.company}</Text>
+                    <Text style={mod.entryMeta}>
+                      {e.startDate} – {e.current ? 'current' : e.endDate}{p.location ? `  /  ${p.location}` : ''}
+                    </Text>
+                    {e.bullets.filter(Boolean).map((b, i) => (
+                      <View key={i} style={mod.bullet}>
+                        <Text style={mod.dot}>•</Text>
+                        <Text style={mod.bulletText}>{b}</Text>
+                      </View>
+                    ))}
                   </View>
-                  <Text style={boldStyles.entryCompany}>{exp.company}</Text>
-                  {exp.bullets.filter(Boolean).map((b, i) => (
-                    <View key={i} style={boldStyles.bullet}>
-                      <Text style={boldStyles.bulletDot}>▸</Text>
-                      <Text style={boldStyles.bulletText}>{b}</Text>
-                    </View>
-                  ))}
-                </View>
-              ))}
-            </View>
-          )}
-          {education.length > 0 && (
-            <View style={boldStyles.section}>
-              <View style={boldStyles.sectionRow}><View style={boldStyles.dot} /><Text style={boldStyles.sectionTitle}>Education</Text></View>
-              {education.map(edu => (
-                <View key={edu.id} style={{ marginBottom: 6 }}>
-                  <View style={boldStyles.entryHeader}>
-                    <Text style={boldStyles.entryTitle}>{edu.school}</Text>
-                    <Text style={boldStyles.entryDate}>{edu.graduationDate}</Text>
-                  </View>
-                  <Text style={{ fontSize: 9, color: '#475569' }}>{edu.degree}{edu.field ? `, ${edu.field}` : ''}</Text>
-                </View>
-              ))}
-            </View>
-          )}
-          {skills.length > 0 && (
-            <View style={boldStyles.section}>
-              <View style={boldStyles.sectionRow}><View style={boldStyles.dot} /><Text style={boldStyles.sectionTitle}>Skills</Text></View>
-              <View style={boldStyles.skillsRow}>
-                {skills.map(sk => <Text key={sk.id} style={boldStyles.skillBadge}>{sk.name}</Text>)}
+                ))}
               </View>
-            </View>
-          )}
+            )}
+            {r.education.length > 0 && (
+              <View style={mod.mainSection}>
+                <Text style={mod.mainHead}>Education</Text>
+                <View style={mod.mainLine} />
+                {r.education.map(e => (
+                  <View key={e.id} style={{ marginBottom: 8 }}>
+                    <Text style={mod.eduTitle}>{e.degree}{e.field ? ` in ${e.field}` : ''}</Text>
+                    <Text style={mod.eduSub}>{e.school}</Text>
+                    <Text style={mod.eduMeta}>{e.graduationDate}</Text>
+                  </View>
+                ))}
+              </View>
+            )}
+          </View>
         </View>
       </Page>
     </Document>
@@ -397,90 +227,122 @@ function BoldDocument({ resume }: { resume: Resume }) {
 }
 
 /* ─────────────────────────────────────────────
-   SIDEBAR  — teal sidebar, two-column layout
+   SIDEBAR — Max Johnson dark navy style
+   Dark sidebar · avatar circle · contact/skills/languages · clean main
 ───────────────────────────────────────────── */
-const sidebarStyles = StyleSheet.create({
+const sb = StyleSheet.create({
   page: { fontFamily: 'Helvetica', fontSize: 10, color: '#1a1a1a', flexDirection: 'row' },
-  sidebar: { width: 170, backgroundColor: '#0f766e', padding: 24, flexDirection: 'column' },
-  avatarCircle: { width: 52, height: 52, borderRadius: 26, backgroundColor: '#2dd4bf', alignSelf: 'center', marginBottom: 10, alignItems: 'center', justifyContent: 'center' },
-  avatarText: { color: '#fff', fontSize: 16, fontFamily: 'Helvetica-Bold' },
-  sidebarName: { fontSize: 12, fontFamily: 'Helvetica-Bold', color: '#fff', textAlign: 'center', marginBottom: 3 },
-  sidebarTitle: { fontSize: 8.5, color: '#99f6e4', textAlign: 'center', marginBottom: 14 },
-  sidebarSection: { marginBottom: 12 },
-  sidebarSectionTitle: { fontSize: 8, fontFamily: 'Helvetica-Bold', color: '#2dd4bf', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 6, borderBottomWidth: 0.5, borderBottomColor: '#2dd4bf', paddingBottom: 3 },
-  sidebarItem: { fontSize: 8.5, color: '#ccfbf1', marginBottom: 3, lineHeight: 1.4 },
+  sidebar: { width: 175, backgroundColor: '#1e2936', padding: 22, flexDirection: 'column' },
+  avatar: { width: 70, height: 70, borderRadius: 35, backgroundColor: '#4a9aba', alignSelf: 'center', marginBottom: 18, alignItems: 'center', justifyContent: 'center' },
+  avatarText: { color: '#fff', fontSize: 22, fontFamily: 'Helvetica-Bold' },
+  sbSection: { marginBottom: 14 },
+  sbHead: { fontSize: 13, fontFamily: 'Helvetica-Bold', color: '#fff', marginBottom: 4 },
+  sbLine: { borderBottomWidth: 1.5, borderBottomColor: '#fff', width: 28, marginBottom: 8 },
+  sbLabel: { fontSize: 9, fontFamily: 'Helvetica-Bold', color: '#fff', marginBottom: 1 },
+  sbValue: { fontSize: 9, color: '#b0c4d4', marginBottom: 6, lineHeight: 1.4 },
+  sbBulletRow: { flexDirection: 'row', marginBottom: 3 },
+  sbDot: { color: '#b0c4d4', marginRight: 5, fontSize: 9 },
+  sbBulletText: { fontSize: 9, color: '#b0c4d4' },
   main: { flex: 1, padding: 28 },
+  mainName: { fontSize: 26, fontFamily: 'Helvetica-Bold', textTransform: 'uppercase', letterSpacing: 1.5, color: '#1a1a1a', marginBottom: 4 },
+  mainTitle: { fontSize: 13, color: '#555', marginBottom: 20 },
   section: { marginBottom: 14 },
-  sectionTitle: { fontSize: 10, fontFamily: 'Helvetica-Bold', color: '#0f766e', textTransform: 'uppercase', letterSpacing: 1, borderBottomWidth: 1, borderBottomColor: '#99f6e4', paddingBottom: 3, marginBottom: 8 },
-  entryHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 1 },
-  entryTitle: { fontFamily: 'Helvetica-Bold', fontSize: 10 },
-  entryCompany: { color: '#0f766e', fontSize: 9, marginBottom: 2 },
-  entryDate: { color: '#64748b', fontSize: 9 },
+  secHead: { fontSize: 13, fontFamily: 'Helvetica-Bold', marginBottom: 4 },
+  secLine: { borderBottomWidth: 2, borderBottomColor: '#1a1a1a', width: 28, marginBottom: 8 },
+  para: { fontSize: 9.5, color: '#333', lineHeight: 1.55 },
+  expRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 1 },
+  expTitle: { fontSize: 10, fontFamily: 'Helvetica-Bold' },
+  expCompany: { fontSize: 9.5, color: '#333', marginBottom: 0.5 },
+  expMeta: { fontSize: 9, color: '#666', marginBottom: 4 },
+  expDate: { fontSize: 9, color: '#666' },
   bullet: { flexDirection: 'row', marginBottom: 2.5 },
-  bulletDot: { marginRight: 5, color: '#0f766e' },
-  bulletText: { flex: 1, lineHeight: 1.4 },
+  dot: { marginRight: 5 },
+  bulletText: { flex: 1, fontSize: 9.5, lineHeight: 1.4 },
+  eduTitle: { fontSize: 10, fontFamily: 'Helvetica-Bold', marginBottom: 1 },
+  eduRow: { flexDirection: 'row', justifyContent: 'space-between' },
+  eduSub: { fontSize: 9, color: '#555' },
+  eduDate: { fontSize: 9, color: '#777' },
 })
 
-function SidebarDocument({ resume }: { resume: Resume }) {
-  const { personalInfo: p, experience, education, skills } = resume
+function SidebarDoc({ resume: r }: { resume: Resume }) {
+  const p = r.personalInfo
   const initials = p.name ? p.name.split(' ').map(n => n[0]).slice(0, 2).join('') : 'YN'
+  const jobTitle = p.summary ? p.summary.split('.')[0] : ''
   return (
     <Document>
-      <Page size="LETTER" style={sidebarStyles.page}>
-        {/* Sidebar */}
-        <View style={sidebarStyles.sidebar}>
-          <View style={sidebarStyles.avatarCircle}><Text style={sidebarStyles.avatarText}>{initials}</Text></View>
-          <Text style={sidebarStyles.sidebarName}>{p.name || 'Your Name'}</Text>
-          {p.summary && <Text style={sidebarStyles.sidebarTitle}>{p.summary.split('.')[0]}</Text>}
-          <View style={sidebarStyles.sidebarSection}>
-            <Text style={sidebarStyles.sidebarSectionTitle}>Contact</Text>
-            {p.email && <Text style={sidebarStyles.sidebarItem}>{p.email}</Text>}
-            {p.phone && <Text style={sidebarStyles.sidebarItem}>{p.phone}</Text>}
-            {p.location && <Text style={sidebarStyles.sidebarItem}>{p.location}</Text>}
+      <Page size="LETTER" style={sb.page}>
+        {/* Dark sidebar */}
+        <View style={sb.sidebar}>
+          <View style={sb.avatar}><Text style={sb.avatarText}>{initials}</Text></View>
+          {/* Contact */}
+          <View style={sb.sbSection}>
+            <Text style={sb.sbHead}>Contact</Text>
+            <View style={sb.sbLine} />
+            {p.location && <><Text style={sb.sbLabel}>Address</Text><Text style={sb.sbValue}>{p.location}</Text></>}
+            {p.phone    && <><Text style={sb.sbLabel}>Phone</Text><Text style={sb.sbValue}>{p.phone}</Text></>}
+            {p.email    && <><Text style={sb.sbLabel}>Email</Text><Text style={sb.sbValue}>{p.email}</Text></>}
+            {p.linkedin && <><Text style={sb.sbLabel}>LinkedIn</Text><Text style={sb.sbValue}>{p.linkedin}</Text></>}
           </View>
-          {skills.length > 0 && (
-            <View style={sidebarStyles.sidebarSection}>
-              <Text style={sidebarStyles.sidebarSectionTitle}>Skills</Text>
-              {skills.map(sk => <Text key={sk.id} style={sidebarStyles.sidebarItem}>· {sk.name}</Text>)}
-            </View>
-          )}
-          {education.length > 0 && (
-            <View style={sidebarStyles.sidebarSection}>
-              <Text style={sidebarStyles.sidebarSectionTitle}>Education</Text>
-              {education.map(edu => (
-                <View key={edu.id} style={{ marginBottom: 6 }}>
-                  <Text style={{ ...sidebarStyles.sidebarItem, fontFamily: 'Helvetica-Bold', color: '#fff' }}>{edu.school}</Text>
-                  <Text style={sidebarStyles.sidebarItem}>{edu.degree}</Text>
-                  <Text style={sidebarStyles.sidebarItem}>{edu.graduationDate}</Text>
+          {/* Skills */}
+          {r.skills.length > 0 && (
+            <View style={sb.sbSection}>
+              <Text style={sb.sbHead}>Skills</Text>
+              <View style={sb.sbLine} />
+              {r.skills.map(s => (
+                <View key={s.id} style={sb.sbBulletRow}>
+                  <Text style={sb.sbDot}>•</Text>
+                  <Text style={sb.sbBulletText}>{s.name}</Text>
                 </View>
               ))}
             </View>
           )}
         </View>
         {/* Main content */}
-        <View style={sidebarStyles.main}>
+        <View style={sb.main}>
+          <Text style={sb.mainName}>{p.name || 'Your Name'}</Text>
+          {jobTitle ? <Text style={sb.mainTitle}>{jobTitle}</Text> : null}
+          {/* Profile */}
           {p.summary && (
-            <View style={sidebarStyles.section}>
-              <Text style={sidebarStyles.sectionTitle}>Profile</Text>
-              <Text style={{ fontSize: 9.5, lineHeight: 1.6, color: '#374151' }}>{p.summary}</Text>
+            <View style={sb.section}>
+              <Text style={sb.secHead}>Profile</Text>
+              <View style={sb.secLine} />
+              <Text style={sb.para}>{p.summary}</Text>
             </View>
           )}
-          {experience.length > 0 && (
-            <View style={sidebarStyles.section}>
-              <Text style={sidebarStyles.sectionTitle}>Experience</Text>
-              {experience.map(exp => (
-                <View key={exp.id} style={{ marginBottom: 10 }}>
-                  <View style={sidebarStyles.entryHeader}>
-                    <Text style={sidebarStyles.entryTitle}>{exp.title}</Text>
-                    <Text style={sidebarStyles.entryDate}>{exp.startDate} – {exp.current ? 'Present' : exp.endDate}</Text>
+          {/* Work Experience */}
+          {r.experience.length > 0 && (
+            <View style={sb.section}>
+              <Text style={sb.secHead}>Work Experience</Text>
+              <View style={sb.secLine} />
+              {r.experience.map(e => (
+                <View key={e.id} style={{ marginBottom: 10 }}>
+                  <Text style={sb.expTitle}>{e.title}</Text>
+                  <View style={sb.expRow}>
+                    <Text style={sb.expCompany}>{e.company}</Text>
+                    <Text style={sb.expDate}>{e.startDate} – {e.current ? 'Present' : e.endDate}</Text>
                   </View>
-                  <Text style={sidebarStyles.entryCompany}>{exp.company}</Text>
-                  {exp.bullets.filter(Boolean).map((b, i) => (
-                    <View key={i} style={sidebarStyles.bullet}>
-                      <Text style={sidebarStyles.bulletDot}>•</Text>
-                      <Text style={sidebarStyles.bulletText}>{b}</Text>
+                  {e.bullets.filter(Boolean).map((b, i) => (
+                    <View key={i} style={sb.bullet}>
+                      <Text style={sb.dot}>•</Text>
+                      <Text style={sb.bulletText}>{b}</Text>
                     </View>
                   ))}
+                </View>
+              ))}
+            </View>
+          )}
+          {/* Education */}
+          {r.education.length > 0 && (
+            <View style={sb.section}>
+              <Text style={sb.secHead}>Education</Text>
+              <View style={sb.secLine} />
+              {r.education.map(e => (
+                <View key={e.id} style={{ marginBottom: 7 }}>
+                  <Text style={sb.eduTitle}>{e.degree}{e.field ? ` in ${e.field}` : ''}</Text>
+                  <View style={sb.eduRow}>
+                    <Text style={sb.eduSub}>{e.school}</Text>
+                    <Text style={sb.eduDate}>{e.graduationDate}</Text>
+                  </View>
                 </View>
               ))}
             </View>
@@ -492,85 +354,282 @@ function SidebarDocument({ resume }: { resume: Resume }) {
 }
 
 /* ─────────────────────────────────────────────
-   CLEAN  — centered amber header, elegant
+   MINIMAL — ultra-clean whitespace, thin typography
 ───────────────────────────────────────────── */
-const cleanStyles = StyleSheet.create({
-  page: { fontFamily: 'Helvetica', fontSize: 10, color: '#1c1917', padding: 44 },
-  header: { alignItems: 'center', borderBottomWidth: 2, borderBottomColor: '#b45309', paddingBottom: 12, marginBottom: 14 },
-  name: { fontSize: 22, fontFamily: 'Helvetica-Bold', color: '#1c1917', marginBottom: 3 },
-  title: { fontSize: 11, color: '#b45309', marginBottom: 6 },
-  contactRow: { flexDirection: 'row', gap: 14, fontSize: 9, color: '#78716c' },
-  section: { marginBottom: 14 },
-  sectionTitle: { fontSize: 10, fontFamily: 'Helvetica-Bold', color: '#b45309', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 7 },
-  entryHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 },
-  entryTitle: { fontFamily: 'Helvetica-Bold', fontSize: 10, color: '#1c1917' },
-  entryCompany: { color: '#57534e', fontSize: 9, marginBottom: 3 },
-  entryDate: { color: '#78716c', fontSize: 9 },
+const min = StyleSheet.create({
+  page: { fontFamily: 'Helvetica', fontSize: 10, color: '#111', padding: 52 },
+  name: { fontSize: 26, fontFamily: 'Helvetica-Bold', letterSpacing: 0.5, marginBottom: 3 },
+  title: { fontSize: 12, color: '#777', marginBottom: 5 },
+  contact: { flexDirection: 'row', gap: 16, fontSize: 8.5, color: '#999', marginBottom: 28 },
+  sec: { marginBottom: 18 },
+  secHead: { fontSize: 8.5, fontFamily: 'Helvetica-Bold', textTransform: 'uppercase', letterSpacing: 2.5, color: '#999', marginBottom: 8 },
+  expRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 1 },
+  expTitle: { fontSize: 10.5, fontFamily: 'Helvetica-Bold' },
+  expDate: { fontSize: 9, color: '#999' },
+  expCompany: { fontSize: 9, color: '#777', marginBottom: 4 },
   bullet: { flexDirection: 'row', marginBottom: 2.5 },
-  bulletDot: { marginRight: 5, color: '#b45309' },
-  bulletText: { flex: 1, lineHeight: 1.4, color: '#44403c' },
-  skillBadge: { borderWidth: 0.5, borderColor: '#d6d3d1', color: '#57534e', fontSize: 9, paddingHorizontal: 7, paddingVertical: 2, borderRadius: 3, marginRight: 5, marginBottom: 5 },
-  skillsRow: { flexDirection: 'row', flexWrap: 'wrap' },
+  dash: { marginRight: 6, color: '#bbb' },
+  bulletText: { flex: 1, fontSize: 9.5, lineHeight: 1.5, color: '#333' },
+  eduTitle: { fontSize: 10, fontFamily: 'Helvetica-Bold', marginBottom: 1 },
+  eduSub: { fontSize: 9, color: '#777' },
+  skillRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 3 },
+  skill: { fontSize: 9, color: '#555' },
 })
 
-function CleanDocument({ resume }: { resume: Resume }) {
-  const { personalInfo: p, experience, education, skills } = resume
+function MinimalDoc({ resume: r }: { resume: Resume }) {
+  const p = r.personalInfo
   return (
     <Document>
-      <Page size="LETTER" style={cleanStyles.page}>
-        <View style={cleanStyles.header}>
-          <Text style={cleanStyles.name}>{p.name || 'Your Name'}</Text>
-          {p.summary && <Text style={cleanStyles.title}>{p.summary.split('.')[0]}</Text>}
-          <View style={cleanStyles.contactRow}>
-            {p.email && <Text>{p.email}</Text>}
-            {p.phone && <Text>{p.phone}</Text>}
-            {p.location && <Text>{p.location}</Text>}
-          </View>
+      <Page size="LETTER" style={min.page}>
+        <Text style={min.name}>{p.name || 'Your Name'}</Text>
+        {p.summary && <Text style={min.title}>{p.summary.split('.')[0]}</Text>}
+        <View style={min.contact}>
+          {p.email    && <Text>{p.email}</Text>}
+          {p.phone    && <Text>{p.phone}</Text>}
+          {p.location && <Text>{p.location}</Text>}
+          {p.linkedin && <Text>{p.linkedin}</Text>}
         </View>
         {p.summary && (
-          <View style={cleanStyles.section}>
-            <Text style={cleanStyles.sectionTitle}>Profile</Text>
-            <Text style={{ fontSize: 9.5, lineHeight: 1.6, color: '#57534e' }}>{p.summary}</Text>
+          <View style={min.sec}>
+            <Text style={min.secHead}>Profile</Text>
+            <Text style={{ fontSize: 9.5, lineHeight: 1.6, color: '#444' }}>{p.summary}</Text>
           </View>
         )}
-        {experience.length > 0 && (
-          <View style={cleanStyles.section}>
-            <Text style={cleanStyles.sectionTitle}>Experience</Text>
-            {experience.map(exp => (
-              <View key={exp.id} style={{ marginBottom: 10 }}>
-                <View style={cleanStyles.entryHeader}>
-                  <Text style={cleanStyles.entryTitle}>{exp.title} · {exp.company}</Text>
-                  <Text style={cleanStyles.entryDate}>{exp.startDate} – {exp.current ? 'Present' : exp.endDate}</Text>
+        {r.experience.length > 0 && (
+          <View style={min.sec}>
+            <Text style={min.secHead}>Experience</Text>
+            {r.experience.map(e => (
+              <View key={e.id} style={{ marginBottom: 10 }}>
+                <View style={min.expRow}>
+                  <Text style={min.expTitle}>{e.title}</Text>
+                  <Text style={min.expDate}>{e.startDate} – {e.current ? 'Present' : e.endDate}</Text>
                 </View>
-                {exp.bullets.filter(Boolean).map((b, i) => (
-                  <View key={i} style={cleanStyles.bullet}>
-                    <Text style={cleanStyles.bulletDot}>▪</Text>
-                    <Text style={cleanStyles.bulletText}>{b}</Text>
+                <Text style={min.expCompany}>{e.company}</Text>
+                {e.bullets.filter(Boolean).map((b, i) => (
+                  <View key={i} style={min.bullet}>
+                    <Text style={min.dash}>–</Text>
+                    <Text style={min.bulletText}>{b}</Text>
                   </View>
                 ))}
               </View>
             ))}
           </View>
         )}
-        {education.length > 0 && (
-          <View style={cleanStyles.section}>
-            <Text style={cleanStyles.sectionTitle}>Education</Text>
-            {education.map(edu => (
-              <View key={edu.id} style={{ marginBottom: 6 }}>
-                <View style={cleanStyles.entryHeader}>
-                  <Text style={cleanStyles.entryTitle}>{edu.school}</Text>
-                  <Text style={cleanStyles.entryDate}>{edu.graduationDate}</Text>
+        {r.education.length > 0 && (
+          <View style={min.sec}>
+            <Text style={min.secHead}>Education</Text>
+            {r.education.map(e => (
+              <View key={e.id} style={{ marginBottom: 6 }}>
+                <View style={min.expRow}>
+                  <Text style={min.eduTitle}>{e.degree}{e.field ? `, ${e.field}` : ''}</Text>
+                  <Text style={min.expDate}>{e.graduationDate}</Text>
                 </View>
-                <Text style={cleanStyles.entryCompany}>{edu.degree}{edu.field ? `, ${edu.field}` : ''}</Text>
+                <Text style={min.eduSub}>{e.school}</Text>
               </View>
             ))}
           </View>
         )}
-        {skills.length > 0 && (
-          <View style={cleanStyles.section}>
-            <Text style={cleanStyles.sectionTitle}>Skills</Text>
-            <View style={cleanStyles.skillsRow}>
-              {skills.map(sk => <Text key={sk.id} style={cleanStyles.skillBadge}>{sk.name}</Text>)}
+        {r.skills.length > 0 && (
+          <View style={min.sec}>
+            <Text style={min.secHead}>Skills</Text>
+            <View style={min.skillRow}>
+              {r.skills.map((s, i) => (
+                <Text key={s.id} style={min.skill}>{s.name}{i < r.skills.length - 1 ? '  ·' : ''}</Text>
+              ))}
+            </View>
+          </View>
+        )}
+      </Page>
+    </Document>
+  )
+}
+
+/* ─────────────────────────────────────────────
+   BOLD — deep purple header, strong accent bullets
+───────────────────────────────────────────── */
+const bld = StyleSheet.create({
+  page: { fontFamily: 'Helvetica', fontSize: 10, color: '#1a1a1a' },
+  header: { backgroundColor: '#5b21b6', paddingHorizontal: 40, paddingVertical: 26 },
+  name: { fontSize: 24, fontFamily: 'Helvetica-Bold', color: '#fff', letterSpacing: 1, marginBottom: 4 },
+  title: { fontSize: 11, color: '#ddd6fe', marginBottom: 8 },
+  contactRow: { flexDirection: 'row', gap: 14, fontSize: 9, color: '#c4b5fd' },
+  body: { paddingHorizontal: 40, paddingTop: 20 },
+  sec: { marginBottom: 14 },
+  secRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 3 },
+  accentBar: { width: 4, height: 13, backgroundColor: '#5b21b6', borderRadius: 2 },
+  secHead: { fontSize: 12, fontFamily: 'Helvetica-Bold', textTransform: 'uppercase', letterSpacing: 1, color: '#1a1a1a' },
+  secLine: { borderBottomWidth: 1, borderBottomColor: '#ddd6fe', marginBottom: 9 },
+  expTitle: { fontSize: 10.5, fontFamily: 'Helvetica-Bold' },
+  expRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 },
+  expCompany: { fontSize: 9.5, color: '#5b21b6', marginBottom: 3 },
+  expDate: { fontSize: 9, color: '#666' },
+  bullet: { flexDirection: 'row', marginBottom: 2.5, paddingLeft: 6 },
+  arrowDot: { marginRight: 5, color: '#5b21b6', fontFamily: 'Helvetica-Bold' },
+  bulletText: { flex: 1, fontSize: 9.5, lineHeight: 1.4 },
+  skillBadge: { backgroundColor: '#ede9fe', color: '#5b21b6', fontSize: 9, paddingHorizontal: 7, paddingVertical: 2.5, borderRadius: 3, marginRight: 5, marginBottom: 5 },
+  skillRow: { flexDirection: 'row', flexWrap: 'wrap' },
+})
+
+function BoldDoc({ resume: r }: { resume: Resume }) {
+  const p = r.personalInfo
+  return (
+    <Document>
+      <Page size="LETTER" style={bld.page}>
+        <View style={bld.header}>
+          <Text style={bld.name}>{p.name || 'Your Name'}</Text>
+          {p.summary && <Text style={bld.title}>{p.summary.split('.')[0]}</Text>}
+          <View style={bld.contactRow}>
+            {p.email    && <Text>{p.email}</Text>}
+            {p.phone    && <Text>{p.phone}</Text>}
+            {p.location && <Text>{p.location}</Text>}
+          </View>
+        </View>
+        <View style={bld.body}>
+          {p.summary && (
+            <View style={bld.sec}>
+              <View style={bld.secRow}><View style={bld.accentBar} /><Text style={bld.secHead}>Summary</Text></View>
+              <View style={bld.secLine} />
+              <Text style={{ fontSize: 9.5, lineHeight: 1.5, color: '#374151' }}>{p.summary}</Text>
+            </View>
+          )}
+          {r.experience.length > 0 && (
+            <View style={bld.sec}>
+              <View style={bld.secRow}><View style={bld.accentBar} /><Text style={bld.secHead}>Experience</Text></View>
+              <View style={bld.secLine} />
+              {r.experience.map(e => (
+                <View key={e.id} style={{ marginBottom: 10 }}>
+                  <View style={bld.expRow}>
+                    <Text style={bld.expTitle}>{e.title}</Text>
+                    <Text style={bld.expDate}>{e.startDate} – {e.current ? 'Present' : e.endDate}</Text>
+                  </View>
+                  <Text style={bld.expCompany}>{e.company}</Text>
+                  {e.bullets.filter(Boolean).map((b, i) => (
+                    <View key={i} style={bld.bullet}>
+                      <Text style={bld.arrowDot}>▸</Text>
+                      <Text style={bld.bulletText}>{b}</Text>
+                    </View>
+                  ))}
+                </View>
+              ))}
+            </View>
+          )}
+          {r.education.length > 0 && (
+            <View style={bld.sec}>
+              <View style={bld.secRow}><View style={bld.accentBar} /><Text style={bld.secHead}>Education</Text></View>
+              <View style={bld.secLine} />
+              {r.education.map(e => (
+                <View key={e.id} style={{ marginBottom: 7 }}>
+                  <View style={bld.expRow}>
+                    <Text style={bld.expTitle}>{e.school}</Text>
+                    <Text style={bld.expDate}>{e.graduationDate}</Text>
+                  </View>
+                  <Text style={{ fontSize: 9.5, color: '#5b21b6' }}>{e.degree}{e.field ? `, ${e.field}` : ''}</Text>
+                </View>
+              ))}
+            </View>
+          )}
+          {r.skills.length > 0 && (
+            <View style={bld.sec}>
+              <View style={bld.secRow}><View style={bld.accentBar} /><Text style={bld.secHead}>Skills</Text></View>
+              <View style={bld.secLine} />
+              <View style={bld.skillRow}>
+                {r.skills.map(s => <Text key={s.id} style={bld.skillBadge}>{s.name}</Text>)}
+              </View>
+            </View>
+          )}
+        </View>
+      </Page>
+    </Document>
+  )
+}
+
+/* ─────────────────────────────────────────────
+   CLEAN — amber accent, centered serif header, elegant borders
+───────────────────────────────────────────── */
+const cln = StyleSheet.create({
+  page: { fontFamily: 'Helvetica', fontSize: 10, color: '#1c1917', padding: 44 },
+  header: { alignItems: 'center', borderBottomWidth: 2.5, borderBottomColor: '#b45309', paddingBottom: 14, marginBottom: 16 },
+  name: { fontSize: 24, fontFamily: 'Helvetica-Bold', color: '#1c1917', letterSpacing: 1, marginBottom: 4 },
+  title: { fontSize: 11, color: '#b45309', letterSpacing: 0.5, marginBottom: 7 },
+  contactRow: { flexDirection: 'row', gap: 16, fontSize: 9, color: '#78716c' },
+  sec: { marginBottom: 15 },
+  secHead: { fontSize: 10.5, fontFamily: 'Helvetica-Bold', color: '#b45309', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 6 },
+  entryRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 },
+  entryTitle: { fontSize: 10.5, fontFamily: 'Helvetica-Bold' },
+  entryDate: { fontSize: 9, color: '#78716c' },
+  entrySub: { fontSize: 9.5, color: '#57534e', marginBottom: 4 },
+  bullet: { flexDirection: 'row', marginBottom: 2.5 },
+  accentDot: { marginRight: 5, color: '#b45309' },
+  bulletText: { flex: 1, fontSize: 9.5, lineHeight: 1.4, color: '#44403c' },
+  skillBadge: { borderWidth: 1, borderColor: '#e7d5bb', color: '#57534e', fontSize: 9, paddingHorizontal: 8, paddingVertical: 2.5, borderRadius: 10, marginRight: 5, marginBottom: 5 },
+  skillRow: { flexDirection: 'row', flexWrap: 'wrap' },
+  divider: { borderBottomWidth: 0.5, borderBottomColor: '#e7d5bb', marginBottom: 8 },
+})
+
+function CleanDoc({ resume: r }: { resume: Resume }) {
+  const p = r.personalInfo
+  return (
+    <Document>
+      <Page size="LETTER" style={cln.page}>
+        <View style={cln.header}>
+          <Text style={cln.name}>{p.name || 'Your Name'}</Text>
+          {p.summary && <Text style={cln.title}>{p.summary.split('.')[0]}</Text>}
+          <View style={cln.contactRow}>
+            {p.email    && <Text>{p.email}</Text>}
+            {p.phone    && <Text>{p.phone}</Text>}
+            {p.location && <Text>{p.location}</Text>}
+            {p.linkedin && <Text>{p.linkedin}</Text>}
+          </View>
+        </View>
+        {p.summary && (
+          <View style={cln.sec}>
+            <Text style={cln.secHead}>Profile</Text>
+            <View style={cln.divider} />
+            <Text style={{ fontSize: 9.5, lineHeight: 1.65, color: '#57534e' }}>{p.summary}</Text>
+          </View>
+        )}
+        {r.experience.length > 0 && (
+          <View style={cln.sec}>
+            <Text style={cln.secHead}>Experience</Text>
+            <View style={cln.divider} />
+            {r.experience.map(e => (
+              <View key={e.id} style={{ marginBottom: 10 }}>
+                <View style={cln.entryRow}>
+                  <Text style={cln.entryTitle}>{e.title}</Text>
+                  <Text style={cln.entryDate}>{e.startDate} – {e.current ? 'Present' : e.endDate}</Text>
+                </View>
+                <Text style={cln.entrySub}>{e.company}</Text>
+                {e.bullets.filter(Boolean).map((b, i) => (
+                  <View key={i} style={cln.bullet}>
+                    <Text style={cln.accentDot}>▪</Text>
+                    <Text style={cln.bulletText}>{b}</Text>
+                  </View>
+                ))}
+              </View>
+            ))}
+          </View>
+        )}
+        {r.education.length > 0 && (
+          <View style={cln.sec}>
+            <Text style={cln.secHead}>Education</Text>
+            <View style={cln.divider} />
+            {r.education.map(e => (
+              <View key={e.id} style={{ marginBottom: 7 }}>
+                <View style={cln.entryRow}>
+                  <Text style={cln.entryTitle}>{e.school}</Text>
+                  <Text style={cln.entryDate}>{e.graduationDate}</Text>
+                </View>
+                <Text style={cln.entrySub}>{e.degree}{e.field ? `, ${e.field}` : ''}</Text>
+              </View>
+            ))}
+          </View>
+        )}
+        {r.skills.length > 0 && (
+          <View style={cln.sec}>
+            <Text style={cln.secHead}>Skills</Text>
+            <View style={cln.divider} />
+            <View style={cln.skillRow}>
+              {r.skills.map(s => <Text key={s.id} style={cln.skillBadge}>{s.name}</Text>)}
             </View>
           </View>
         )}
@@ -583,15 +642,21 @@ function CleanDocument({ resume }: { resume: Resume }) {
    Router
 ───────────────────────────────────────────── */
 const DOCS: Record<TemplateId, React.FC<{ resume: Resume }>> = {
-  classic: ClassicDocument,
-  modern: ModernDocument,
-  minimal: MinimalDocument,
-  bold: BoldDocument,
-  sidebar: SidebarDocument,
-  clean: CleanDocument,
+  classic: ClassicDoc,
+  modern:  ModernDoc,
+  minimal: MinimalDoc,
+  bold:    BoldDoc,
+  sidebar: SidebarDoc,
+  clean:   CleanDoc,
 }
 
-export default function ResumeDocument({ resume, templateId = 'classic' }: { resume: Resume; templateId?: TemplateId }) {
-  const Doc = DOCS[templateId] ?? ClassicDocument
+export default function ResumeDocument({
+  resume,
+  templateId = 'classic',
+}: {
+  resume: Resume
+  templateId?: TemplateId
+}) {
+  const Doc = DOCS[templateId] ?? ClassicDoc
   return <Doc resume={resume} />
 }
