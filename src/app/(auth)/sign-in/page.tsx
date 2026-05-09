@@ -21,8 +21,9 @@ type Mode = 'choose' | 'magic-sent'
 
 function SignInInner() {
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [mode, setMode] = useState<Mode>('choose')
-  const [loading, setLoading] = useState<'google' | 'magic' | null>(null)
+  const [loading, setLoading] = useState<'google' | 'magic' | 'password' | null>(null)
   const [error, setError] = useState('')
   const searchParams = useSearchParams()
 
@@ -36,6 +37,20 @@ function SignInInner() {
     setLoading('google')
     setError('')
     await signIn('google', { callbackUrl: '/dashboard' })
+  }
+
+  async function handlePassword(e: React.FormEvent) {
+    e.preventDefault()
+    if (!email || !password) return
+    setLoading('password')
+    setError('')
+    const res = await signIn('credentials', { email, password, redirect: false })
+    setLoading(null)
+    if (!res || res.error) {
+      setError('Invalid email or password.')
+    } else {
+      window.location.href = '/dashboard'
+    }
   }
 
   async function handleMagicLink(e: React.FormEvent) {
@@ -111,8 +126,8 @@ function SignInInner() {
               <div className="flex-1 h-px bg-stone-800" />
             </div>
 
-            {/* Magic link */}
-            <form onSubmit={handleMagicLink} className="space-y-3">
+            {/* Email + password */}
+            <form onSubmit={handlePassword} className="space-y-3">
               <div className="relative">
                 <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-600 z-10 pointer-events-none" />
                 <input
@@ -124,6 +139,14 @@ function SignInInner() {
                   className="w-full h-11 pl-10 pr-4 bg-stone-900 border border-stone-700 rounded-lg text-stone-100 placeholder:text-stone-600 focus:outline-none focus:border-amber-500/60 text-sm transition-colors"
                 />
               </div>
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full h-11 px-4 bg-stone-900 border border-stone-700 rounded-lg text-stone-100 placeholder:text-stone-600 focus:outline-none focus:border-amber-500/60 text-sm transition-colors"
+              />
 
               {error && (
                 <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-xs rounded-lg px-4 py-2.5">
@@ -133,20 +156,27 @@ function SignInInner() {
 
               <button
                 type="submit"
-                disabled={loading !== null || !email}
+                disabled={loading !== null || !email || !password}
                 className="w-full h-11 flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-sm rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                {loading === 'magic' ? (
+                {loading === 'password' ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
-                  <>Continue with Email <ArrowRight className="w-4 h-4" /></>
+                  <>Sign In <ArrowRight className="w-4 h-4" /></>
                 )}
               </button>
             </form>
 
-            <p className="text-center text-stone-700 text-xs pt-1">
-              No password needed — we&apos;ll email you a sign-in link.
-            </p>
+            {/* Magic link fallback */}
+            <form onSubmit={handleMagicLink} className="pt-1">
+              <button
+                type="submit"
+                disabled={loading !== null || !email}
+                className="w-full text-stone-500 hover:text-stone-300 text-xs transition-colors py-1"
+              >
+                {loading === 'magic' ? <Loader2 className="w-3 h-3 animate-spin mx-auto" /> : 'Email me a sign-in link instead'}
+              </button>
+            </form>
           </div>
 
           <p className="text-center text-stone-700 text-xs mt-8">
