@@ -3,6 +3,10 @@ import { db } from '@/lib/db'
 import bcrypt from 'bcryptjs'
 
 export async function GET(req: Request) {
+  // Disabled in production
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  }
   const secret = new URL(req.url).searchParams.get('secret')
   if (secret !== process.env.SEED_SECRET) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })

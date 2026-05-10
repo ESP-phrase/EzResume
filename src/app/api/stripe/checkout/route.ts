@@ -6,7 +6,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 export async function POST(req: NextRequest) {
   try {
     const { mode, resumeId } = await req.json()
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+    const appUrl = new URL(req.url).origin
 
     if (mode === 'subscription') {
       const session = await stripe.checkout.sessions.create({
