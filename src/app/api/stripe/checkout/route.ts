@@ -8,12 +8,15 @@ export async function POST(req: NextRequest) {
     const { mode, resumeId } = await req.json()
     const appUrl = new URL(req.url).origin
 
+    const cancelUrl = resumeId ? `${appUrl}/builder?id=${resumeId}` : `${appUrl}/builder`
+
     if (mode === 'subscription') {
       const session = await stripe.checkout.sessions.create({
         mode: 'subscription',
         line_items: [{ price: process.env.STRIPE_PRICE_ID_SUBSCRIPTION, quantity: 1 }],
+        metadata: { resumeId: resumeId ?? '' },
         success_url: `${appUrl}/download?session_id={CHECKOUT_SESSION_ID}&resume_id=${resumeId}`,
-        cancel_url: `${appUrl}/builder`,
+        cancel_url: cancelUrl,
       })
       return NextResponse.json({ url: session.url })
     }
@@ -31,8 +34,9 @@ export async function POST(req: NextRequest) {
           quantity: 1,
         },
       ],
+      metadata: { resumeId: resumeId ?? '' },
       success_url: `${appUrl}/download?session_id={CHECKOUT_SESSION_ID}&resume_id=${resumeId}`,
-      cancel_url: `${appUrl}/builder`,
+      cancel_url: cancelUrl,
     })
 
     return NextResponse.json({ url: session.url })

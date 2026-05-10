@@ -159,18 +159,29 @@ export default function DashboardShell({ user, initialResumes }: Props) {
 
   async function handleNew() {
     setCreating(true)
-    const res = await fetch('/api/resumes', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: 'My Resume' }) })
-    const data = await res.json()
-    if (data.resume) router.push(`/builder?id=${data.resume.id}`)
-    else setCreating(false)
+    try {
+      const res = await fetch('/api/resumes', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: 'My Resume' }) })
+      if (!res.ok) throw new Error('Failed')
+      const data = await res.json()
+      if (data.resume) router.push(`/builder?id=${data.resume.id}`)
+      else setCreating(false)
+    } catch {
+      setCreating(false)
+    }
   }
 
   async function handleDelete(id: string) {
     setDeletingId(id)
-    await fetch(`/api/resumes/${id}`, { method: 'DELETE' })
-    setResumes(rs => rs.filter(r => r.id !== id))
-    setDeletingId(null)
-    setConfirmDelete(null)
+    try {
+      const res = await fetch(`/api/resumes/${id}`, { method: 'DELETE' })
+      if (!res.ok) throw new Error('Failed')
+      setResumes(rs => rs.filter(r => r.id !== id))
+    } catch {
+      // restore UI state on failure
+    } finally {
+      setDeletingId(null)
+      setConfirmDelete(null)
+    }
   }
 
   const hour = new Date().getHours()
