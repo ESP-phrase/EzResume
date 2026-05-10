@@ -20,11 +20,12 @@ export async function POST(req: Request) {
 
     await db.magicToken.create({ data: { email, token, expiresAt } })
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+    const baseUrl = new URL(req.url).origin
     const link = `${baseUrl}/api/auth/magic-link/verify?token=${token}`
 
+    const fromAddress = process.env.EMAIL_FROM ?? 'onboarding@resend.dev'
     await resend.emails.send({
-      from: 'ResumeGenius <onboarding@resend.dev>',
+      from: `ResumeGenius <${fromAddress}>`,
       to: email,
       subject: 'Your sign-in link for ResumeGenius',
       html: `
