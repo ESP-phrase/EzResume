@@ -3,6 +3,7 @@ import { CheckCircle, Star, ArrowRight } from 'lucide-react'
 import { Logo } from '@/components/Logo'
 import HomeDemoSection from './HomeDemoSection'
 import ExitIntent from './ExitIntent'
+import StickyBar from './StickyBar'
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -458,6 +459,7 @@ export default function Home() {
 
       </main>
       <ExitIntent />
+      <StickyBar />
     </>
   )
 }
