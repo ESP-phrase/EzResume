@@ -450,9 +450,9 @@ export default function Home() {
             <Logo size="sm" />
             <span className="text-stone-700 text-sm">© {new Date().getFullYear()} ResumeGenius</span>
             <div className="flex gap-6 text-stone-600 text-sm">
-              <a href="#" className="hover:text-stone-300 transition-colors">Privacy</a>
-              <a href="#" className="hover:text-stone-300 transition-colors">Terms</a>
-              <a href="#" className="hover:text-stone-300 transition-colors">Contact</a>
+              <Link href="/privacy" className="hover:text-stone-300 transition-colors">Privacy</Link>
+              <Link href="/terms" className="hover:text-stone-300 transition-colors">Terms</Link>
+              <a href="mailto:support@resumegenius.guru" className="hover:text-stone-300 transition-colors">Contact</a>
             </div>
           </div>
         </footer>

@@ -115,7 +115,7 @@ function SignInInner() {
 
           <p className="text-center text-stone-700 text-xs mt-8">
             By continuing, you agree to our{' '}
-            <a href="/terms" className="text-stone-500 hover:text-stone-300 transition-colors">Terms</a>
+            <a href="/terms" className="text-stone-500 hover:text-stone-300 transition-colors">Terms of Service</a>
             {' '}and{' '}
             <a href="/privacy" className="text-stone-500 hover:text-stone-300 transition-colors">Privacy Policy</a>
           </p>
