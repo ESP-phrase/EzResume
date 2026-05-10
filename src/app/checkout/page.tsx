@@ -11,22 +11,22 @@ const PLANS = [
   {
     id: 'one-time' as const,
     label: 'One-Time Download',
-    price: '$3.24',
+    price: '$2.59',
     originalPrice: '$4.99',
-    badge: '35% off',
+    badge: '48% off',
     sub: 'one time',
     features: ['1 resume PDF download', 'AI-enhanced bullet points', 'All templates', 'ATS-optimized format'],
-    cta: 'Pay $3.24 & Download',
+    cta: 'Pay $2.59 & Download',
   },
   {
     id: 'subscription' as const,
     label: 'Monthly Pro',
-    price: '$2.00',
+    price: '$1.59',
     originalPrice: '$9.99',
     badge: 'Limited offer',
     sub: 'per month',
     features: ['Unlimited PDF downloads', 'Unlimited AI enhancements', 'All 6 templates', 'Priority support', 'ATS score checker (soon)'],
-    cta: 'Start Pro · $2/mo today',
+    cta: 'Start Pro · $1.59/mo today',
   },
 ]
 
@@ -42,7 +42,7 @@ function CheckoutInner() {
     setError('')
     rdtTrack('AddToCart', {
       currency: 'USD',
-      value: selected === 'subscription' ? 2.00 : 3.24,
+      value: selected === 'subscription' ? 1.59 : 2.59,
       itemCount: 1,
     })
     try {

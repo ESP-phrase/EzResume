@@ -19,12 +19,12 @@ export function OneTimeCTA() {
   const [loading, setLoading] = useState(false)
   return (
     <button
-      onClick={async () => { setLoading(true); await goToCheckout('payment', 3.24) }}
+      onClick={async () => { setLoading(true); await goToCheckout('payment', 2.59) }}
       disabled={loading}
       className="w-full border border-stone-700 hover:border-stone-500 text-stone-200 hover:text-white font-semibold text-sm py-3 rounded-xl transition-colors text-center flex items-center justify-center gap-2 disabled:opacity-50"
     >
       {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-      {loading ? 'Redirecting…' : 'Pay $3.24 & Download'}
+      {loading ? 'Redirecting…' : 'Pay $2.59 & Download'}
     </button>
   )
 }
@@ -33,7 +33,7 @@ export function ProCTA() {
   const [loading, setLoading] = useState(false)
   return (
     <button
-      onClick={async () => { setLoading(true); await goToCheckout('subscription', 2.00) }}
+      onClick={async () => { setLoading(true); await goToCheckout('subscription', 1.59) }}
       disabled={loading}
       className="w-full bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-sm py-3 rounded-xl transition-colors text-center flex items-center justify-center gap-2 disabled:opacity-50"
     >
