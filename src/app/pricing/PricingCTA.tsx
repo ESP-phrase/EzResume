@@ -19,12 +19,12 @@ export function OneTimeCTA() {
   const [loading, setLoading] = useState(false)
   return (
     <button
-      onClick={async () => { setLoading(true); await goToCheckout('payment', 2.59) }}
+      onClick={async () => { setLoading(true); await goToCheckout('payment', 126.99) }}
       disabled={loading}
       className="w-full border border-stone-700 hover:border-stone-500 text-stone-200 hover:text-white font-semibold text-sm py-3 rounded-xl transition-colors text-center flex items-center justify-center gap-2 disabled:opacity-50"
     >
       {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-      {loading ? 'Redirecting…' : 'Pay $2.59 & Download'}
+      {loading ? 'Redirecting…' : 'Get Lifetime Access — $126.99'}
     </button>
   )
 }
@@ -33,12 +33,12 @@ export function ProCTA() {
   const [loading, setLoading] = useState(false)
   return (
     <button
-      onClick={async () => { setLoading(true); await goToCheckout('subscription', 1.59) }}
+      onClick={async () => { setLoading(true); await goToCheckout('subscription', 24.99) }}
       disabled={loading}
       className="w-full bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-sm py-3 rounded-xl transition-colors text-center flex items-center justify-center gap-2 disabled:opacity-50"
     >
       {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
-      {loading ? 'Redirecting…' : 'Start for $2/mo'}
+      {loading ? 'Redirecting…' : 'Start Pro — $24.99/mo'}
     </button>
   )
 }

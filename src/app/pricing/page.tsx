@@ -6,7 +6,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Pricing',
-  description: 'Free to build, pay only when you download. One-time $2.59 or unlimited downloads at $1.59/mo.',
+  description: 'Free to build, pay only when you download. One-time $126.99 lifetime or unlimited downloads at $24.99/mo.',
 }
 
 const ONE_TIME = [
@@ -91,11 +91,11 @@ export default function PricingPage() {
               <div className="mb-6">
                 <div className="text-stone-400 text-sm font-semibold uppercase tracking-widest mb-3">One-Time</div>
                 <div className="flex items-baseline gap-2 mb-1">
-                  <span className="text-4xl font-black text-stone-100">$2.59</span>
-                  <span className="text-stone-500 text-sm line-through">$4.99</span>
-                  <span className="bg-amber-500/20 text-amber-400 text-xs font-bold px-2 py-0.5 rounded-full">48% off</span>
+                  <span className="text-4xl font-black text-stone-100">$126.99</span>
+                  <span className="text-stone-500 text-sm line-through">$149</span>
+                  <span className="bg-amber-500/20 text-amber-400 text-xs font-bold px-2 py-0.5 rounded-full">15% off</span>
                 </div>
-                <p className="text-stone-500 text-sm">Single PDF, yours to keep forever</p>
+                <p className="text-stone-500 text-sm">One-time payment · Lifetime access</p>
               </div>
 
               <ul className="space-y-3 mb-8 flex-1">
@@ -125,9 +125,9 @@ export default function PricingPage() {
               <div className="mb-6">
                 <div className="text-amber-400 text-sm font-semibold uppercase tracking-widest mb-3">Pro</div>
                 <div className="flex items-baseline gap-2 mb-1">
-                  <span className="text-4xl font-black text-stone-100">$1.59</span>
+                  <span className="text-4xl font-black text-stone-100">$24.99</span>
                   <span className="text-stone-500 text-sm">/month</span>
-                  <span className="text-stone-500 text-sm line-through">$9.99</span>
+                  <span className="text-stone-500 text-sm line-through">$29</span>
                 </div>
                 <p className="text-stone-500 text-sm">Unlimited everything — lock in this price forever</p>
               </div>
@@ -166,8 +166,8 @@ export default function PricingPage() {
             <div className="bg-stone-900 border border-stone-800 rounded-2xl overflow-hidden">
               <div className="grid grid-cols-3 text-xs font-bold uppercase tracking-widest text-stone-500 border-b border-stone-800">
                 <div className="px-6 py-4">Feature</div>
-                <div className="px-6 py-4 text-center border-l border-stone-800">One-Time · $2.59</div>
-                <div className="px-6 py-4 text-center border-l border-stone-800 text-amber-400">Pro · $1.59/mo</div>
+                <div className="px-6 py-4 text-center border-l border-stone-800">Lifetime · $126.99</div>
+                <div className="px-6 py-4 text-center border-l border-stone-800 text-amber-400">Pro · $24.99/mo</div>
               </div>
               {[
                 ['Build & preview resume', true, true],
