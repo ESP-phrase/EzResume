@@ -1,29 +1,44 @@
 'use client'
 
-import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+import { useState } from 'react'
+import { ArrowRight, Loader2 } from 'lucide-react'
 import { rdtTrack } from '@/lib/rdt'
 
+async function goToCheckout(mode: 'payment' | 'subscription', value: number) {
+  rdtTrack('AddToCart', { currency: 'USD', value, itemCount: 1 })
+  const res = await fetch('/api/stripe/checkout', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ mode, resumeId: 'direct' }),
+  })
+  const data = await res.json()
+  if (data.url) window.location.href = data.url
+}
+
 export function OneTimeCTA() {
+  const [loading, setLoading] = useState(false)
   return (
-    <Link
-      href="/start?plan=one-time"
-      onClick={() => rdtTrack('AddToCart', { currency: 'USD', value: 3.24, itemCount: 1 })}
-      className="w-full border border-stone-700 hover:border-stone-500 text-stone-200 hover:text-white font-semibold text-sm py-3 rounded-xl transition-colors text-center block"
+    <button
+      onClick={async () => { setLoading(true); await goToCheckout('payment', 3.24) }}
+      disabled={loading}
+      className="w-full border border-stone-700 hover:border-stone-500 text-stone-200 hover:text-white font-semibold text-sm py-3 rounded-xl transition-colors text-center flex items-center justify-center gap-2 disabled:opacity-50"
     >
-      Get Started
-    </Link>
+      {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+      {loading ? 'Redirecting…' : 'Pay $3.24 & Download'}
+    </button>
   )
 }
 
 export function ProCTA() {
+  const [loading, setLoading] = useState(false)
   return (
-    <Link
-      href="/start?plan=subscription"
-      onClick={() => rdtTrack('AddToCart', { currency: 'USD', value: 2.00, itemCount: 1 })}
-      className="w-full bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-sm py-3 rounded-xl transition-colors text-center flex items-center justify-center gap-2"
+    <button
+      onClick={async () => { setLoading(true); await goToCheckout('subscription', 2.00) }}
+      disabled={loading}
+      className="w-full bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-sm py-3 rounded-xl transition-colors text-center flex items-center justify-center gap-2 disabled:opacity-50"
     >
-      Start for $2/mo <ArrowRight className="w-4 h-4" />
-    </Link>
+      {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
+      {loading ? 'Redirecting…' : 'Start for $2/mo'}
+    </button>
   )
 }
