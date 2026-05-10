@@ -205,6 +205,14 @@ function CheckoutInner() {
               256-bit SSL encryption · Powered by Stripe
             </div>
 
+            <div className="flex items-center justify-center gap-2 bg-stone-800/60 border border-stone-700 rounded-xl px-4 py-3">
+              <span className="text-green-400 text-base">🛡</span>
+              <div className="text-center">
+                <span className="text-stone-200 text-xs font-semibold">100% Money-Back Guarantee</span>
+                <p className="text-stone-500 text-[11px] mt-0.5">Not satisfied? Email us within 7 days for a full refund.</p>
+              </div>
+            </div>
+
             {selected === 'subscription' && (
               <p className="text-center text-stone-600 text-xs">
                 Cancel anytime from your account settings. No questions asked.

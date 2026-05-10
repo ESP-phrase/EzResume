@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { CheckCircle, Star, ArrowRight } from 'lucide-react'
 import { Logo } from '@/components/Logo'
+import HomeDemoSection from './HomeDemoSection'
+import ExitIntent from './ExitIntent'
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -236,6 +238,9 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Live Demo */}
+        <HomeDemoSection />
+
         {/* Features */}
         <section className="py-28 px-6">
           <div className="max-w-4xl mx-auto">
@@ -452,6 +457,7 @@ export default function Home() {
         </footer>
 
       </main>
+      <ExitIntent />
     </>
   )
 }

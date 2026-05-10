@@ -145,6 +145,14 @@ export default function PricingPage() {
             </div>
           </div>
 
+          {/* Money-back guarantee */}
+          <div className="max-w-4xl mx-auto mt-6">
+            <div className="flex items-center justify-center gap-3 text-sm text-stone-400">
+              <span className="text-green-400 text-lg">🛡</span>
+              <span><strong className="text-stone-200">100% money-back guarantee</strong> — not happy within 7 days? Full refund, no questions asked.</span>
+            </div>
+          </div>
+
           {/* Free callout */}
           <div className="max-w-4xl mx-auto mt-6">
             <div className="bg-stone-900/60 border border-stone-800 rounded-xl px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
