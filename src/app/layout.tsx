@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, DM_Serif_Display } from "next/font/google";
 import Providers from "@/components/Providers";
 import { PostHogProvider } from "@/components/PostHogProvider";
@@ -12,25 +12,25 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://resumegenius.guru";
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: “ResumeGenius — Build a Resume That Gets You Hired”,
-    template: “%s | ResumeGenius”,
+    default: "ResumeGenius — Build a Resume That Gets You Hired",
+    template: "%s | ResumeGenius",
   },
-  description: “ResumeGenius rewrites your resume into achievement-focused language and exports a polished PDF in minutes. Used by professionals at Google, Stripe, Airbnb and more.”,
-  keywords: [“resume builder”, “AI resume”, “resume writer”, “professional resume”, “ATS resume”, “resume PDF”, “free resume builder”],
-  authors: [{ name: “ResumeGenius” }],
-  creator: “ResumeGenius”,
+  description: "ResumeGenius rewrites your resume into achievement-focused language and exports a polished PDF in minutes. Used by professionals at Google, Stripe, Airbnb and more.",
+  keywords: ["resume builder", "AI resume", "resume writer", "professional resume", "ATS resume", "resume PDF", "free resume builder"],
+  authors: [{ name: "ResumeGenius" }],
+  creator: "ResumeGenius",
   openGraph: {
-    type: “website”,
-    locale: “en_US”,
+    type: "website",
+    locale: "en_US",
     url: APP_URL,
-    siteName: “ResumeGenius”,
-    title: “ResumeGenius — Build a Resume That Gets You Hired”,
-    description: “Rewrites your experience into language that gets responses. Polished PDF in minutes.”,
-    images: [{ url: “/og.png”, width: 1200, height: 630, alt: “ResumeGenius” }],
+    siteName: "ResumeGenius",
+    title: "ResumeGenius — Build a Resume That Gets You Hired",
+    description: "Rewrites your experience into language that gets responses. Polished PDF in minutes.",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "ResumeGenius" }],
   },
   twitter: {
-    card: “summary_large_image”,
-    title: “ResumeGenius — Build a Resume That Gets You Hired”,
+    card: "summary_large_image",
+    title: "ResumeGenius — Build a Resume That Gets You Hired",
     description: "Rewrites your experience into language that gets responses. Polished PDF in minutes.",
     images: ["/og.png"],
   },
