@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { Suspense, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
@@ -14,9 +14,9 @@ const PLANS = [
     price: '$126.99',
     originalPrice: '$149',
     badge: '15% off',
-    sub: 'one time · lifetime access',
-    features: ['Unlimited PDF downloads', 'All AI bullet rewrites', 'All templates', 'ATS-optimized format', 'Lifetime access — pay once'],
-    cta: 'Pay $126.99 — Lifetime Access',
+    sub: 'one time Â· lifetime access',
+    features: ['Unlimited PDF downloads', 'All AI bullet rewrites', 'All templates', 'ATS-optimized format', 'Lifetime access â€” pay once'],
+    cta: 'Pay $126.99 â€” Lifetime Access',
   },
   {
     id: 'subscription' as const,
@@ -26,7 +26,7 @@ const PLANS = [
     badge: '15% off',
     sub: 'per month',
     features: ['Unlimited PDF downloads', 'Unlimited AI enhancements', 'All 6 templates', 'Priority support', 'ATS score checker (soon)', 'Cancel anytime'],
-    cta: 'Start Pro · $24.99/mo',
+    cta: 'Start Pro Â· $24.99/mo',
   },
 ]
 
@@ -81,7 +81,7 @@ function CheckoutInner() {
       <div className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
 
-          {/* Left — what you get */}
+          {/* Left â€” what you get */}
           <div className="space-y-8">
             <div>
               {resumeId ? (
@@ -118,7 +118,7 @@ function CheckoutInner() {
             {/* Testimonial */}
             <div className="bg-stone-900 border border-stone-800 rounded-2xl p-5">
               <p className="text-stone-400 text-sm leading-relaxed italic mb-3">
-                &ldquo;Got three interview requests the week I updated my resume with ResumeGenius. Worth every penny.&rdquo;
+                &ldquo;Got three interview requests the week I updated my resume with Hone. Worth every penny.&rdquo;
               </p>
               <div className="flex items-center gap-2.5">
                 <div className="w-7 h-7 rounded-full bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xs font-bold">M</div>
@@ -130,7 +130,7 @@ function CheckoutInner() {
             </div>
           </div>
 
-          {/* Right — plan selector + pay */}
+          {/* Right â€” plan selector + pay */}
           <div className="space-y-4">
             {PLANS.map((plan) => {
               const active = selected === plan.id
@@ -202,11 +202,11 @@ function CheckoutInner() {
 
             <div className="flex items-center justify-center gap-1.5 text-stone-600 text-xs">
               <Lock className="w-3 h-3" />
-              256-bit SSL encryption · Powered by Stripe
+              256-bit SSL encryption Â· Powered by Stripe
             </div>
 
             <div className="flex items-center justify-center gap-2 bg-stone-800/60 border border-stone-700 rounded-xl px-4 py-3">
-              <span className="text-green-400 text-base">🛡</span>
+              <span className="text-green-400 text-base">ðŸ›¡</span>
               <div className="text-center">
                 <span className="text-stone-200 text-xs font-semibold">100% Money-Back Guarantee</span>
                 <p className="text-stone-500 text-[11px] mt-0.5">Not satisfied? Email us within 7 days for a full refund.</p>

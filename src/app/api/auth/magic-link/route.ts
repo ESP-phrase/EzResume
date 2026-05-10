@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+﻿import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { db } from '@/lib/db'
 
@@ -25,20 +25,20 @@ export async function POST(req: Request) {
 
     const fromAddress = process.env.EMAIL_FROM ?? 'onboarding@resend.dev'
     await resend.emails.send({
-      from: `ResumeGenius <${fromAddress}>`,
+      from: `Hone <${fromAddress}>`,
       to: email,
-      subject: 'Your sign-in link for ResumeGenius',
+      subject: 'Your sign-in link for Hone',
       html: `
         <div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:40px 24px;background:#fff;">
           <div style="margin-bottom:32px;">
-            <span style="font-size:22px;font-weight:800;color:#0f172a;letter-spacing:-0.5px;">ResumeGenius</span>
+            <span style="font-size:22px;font-weight:800;color:#0f172a;letter-spacing:-0.5px;">Hone</span>
           </div>
           <h1 style="font-size:20px;font-weight:700;color:#0f172a;margin:0 0 8px;">Your magic sign-in link</h1>
           <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0 0 28px;">
             Click the button below to sign in. This link expires in <strong>10 minutes</strong> and can only be used once.
           </p>
           <a href="${link}" style="display:inline-block;background:#10b981;color:#fff;font-weight:700;font-size:15px;padding:14px 28px;border-radius:10px;text-decoration:none;">
-            Sign in to ResumeGenius
+            Sign in to Hone
           </a>
           <p style="color:#94a3b8;font-size:12px;margin:28px 0 0;line-height:1.5;">
             If you didn't request this, you can safely ignore this email.<br/>
