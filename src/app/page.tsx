@@ -8,9 +8,9 @@ import StickyBar from './StickyBar'
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
-  name: 'Hone',
+  name: 'seoForge',
   url: process.env.NEXT_PUBLIC_APP_URL ?? 'https://resumegenius.guru',
-  description: 'Hone rewrites your resume into achievement-focused language and exports a polished PDF in minutes.',
+  description: 'seoForge rewrites your resume into achievement-focused language and exports a polished PDF in minutes.',
   applicationCategory: 'BusinessApplication',
   operatingSystem: 'Web',
   offers: { '@type': 'Offer', price: '24.99', priceCurrency: 'USD' },
@@ -105,7 +105,7 @@ export default function Home() {
                 <em style={{ fontStyle: 'italic', color: '#FBBF24' }}>finally does you justice</em>
               </h1>
               <p className="text-stone-400 text-lg mb-10 leading-relaxed max-w-md">
-                You&apos;re more impressive than your current resume shows. Hone rewrites your experience into language that gets responses — polished PDF in minutes.
+                You&apos;re more impressive than your current resume shows. seoForge rewrites your experience into language that gets responses — polished PDF in minutes.
               </p>
               <div className="flex items-center gap-5 mb-12">
                 <Link href="/start">

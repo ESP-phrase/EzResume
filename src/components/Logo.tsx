@@ -21,7 +21,7 @@ function LogoMark({ size = 20 }: { size?: number }) {
   )
 }
 
-const NAME = 'Hone'
+const NAME = 'seoForge'
 
 export function Logo({ href = '/', size = 'md' }: { href?: string; size?: 'sm' | 'md' | 'lg' }) {
   const sizes = {
