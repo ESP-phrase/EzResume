@@ -13,7 +13,7 @@ const jsonLd = {
   description: 'ResumeGenius rewrites your resume into achievement-focused language and exports a polished PDF in minutes.',
   applicationCategory: 'BusinessApplication',
   operatingSystem: 'Web',
-  offers: { '@type': 'Offer', price: '24.99', priceCurrency: 'USD' },
+  offers: { '@type': 'Offer', price: '29', priceCurrency: 'USD' },
   aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.9', reviewCount: '2100' },
 }
 
@@ -127,7 +127,7 @@ export default function Home() {
                 </div>
                 <div className="w-px h-8 bg-stone-800" />
                 <div>
-                  <div className="text-2xl font-bold text-stone-100">$24.99</div>
+                  <div className="text-2xl font-bold text-stone-100">$29</div>
                   <div className="text-stone-500 text-xs mt-0.5">monthly · cancel anytime</div>
                 </div>
               </div>

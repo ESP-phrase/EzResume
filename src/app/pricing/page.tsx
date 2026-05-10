@@ -1,55 +1,58 @@
 import Link from 'next/link'
-import { CheckCircle, X, ArrowRight } from 'lucide-react'
+import { CheckCircle, ArrowRight, ShieldCheck, Star } from 'lucide-react'
 import { Logo } from '@/components/Logo'
-import { OneTimeCTA, ProCTA } from './PricingCTA'
+import { ProCTA, LifetimeCTA, FreeCTA } from './PricingCTA'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Pricing',
-  description: 'Free to build, pay only when you download. One-time $126.99 lifetime or unlimited downloads at $24.99/mo.',
+  description: 'Free to build. Pro at $29/month. Lifetime at $149. All plans include a 100% money-back guarantee.',
 }
 
-const ONE_TIME = [
-  'One resume PDF download',
-  'All AI bullet rewrites',
-  'All templates',
-  'ATS-optimized format',
-  'Yours to keep forever',
-]
-
-const ONE_TIME_NO = [
-  'Unlimited downloads',
-  'Priority support',
+const FREE = [
+  'Build & preview your resume',
+  'Pick from 6 templates',
+  'Export to text/clipboard',
+  'No credit card required',
 ]
 
 const PRO = [
   'Unlimited PDF downloads',
-  'Unlimited AI enhancements',
-  'All 6 templates',
+  'Unlimited AI bullet rewrites',
+  'AI Generate from prompt',
+  'All 6 premium templates',
+  'ATS-optimized formatting',
   'Priority support',
-  'ATS score checker (soon)',
   'Cancel anytime',
+]
+
+const LIFETIME = [
+  'Everything in Pro',
+  'Pay once, use forever',
+  'No recurring charges',
+  'All future updates included',
+  'Lifetime priority support',
 ]
 
 const FAQ = [
   {
     q: 'Is it really free to build?',
-    a: 'Yes. You can build, edit, and preview your entire resume at no cost. You only pay when you want the PDF.',
+    a: 'Yes. You can build, edit, and preview your entire resume at no cost. You only pay when you want to download the PDF.',
   },
   {
     q: 'What happens after I pay?',
-    a: "You get an instant PDF download. One-time plan gives you that single file forever. Pro gives you unlimited downloads for as long as you're subscribed.",
+    a: "You get instant access. Pro gives you unlimited downloads as long as you're subscribed. Lifetime gives you unlimited downloads forever, no recurring charge.",
   },
   {
     q: 'Can I cancel the subscription?',
     a: 'Anytime, instantly, from your account settings. No cancellation fees, no waiting period.',
   },
   {
-    q: 'Is the $2/mo price permanent?',
-    a: 'This is a launch offer. The price will increase once we exit the early-access period. Lock it in now and keep it.',
+    q: 'How does the money-back guarantee work?',
+    a: 'If you are not happy within 7 days of purchase, email support@resumegenius.guru and we will refund you in full, no questions asked.',
   },
   {
-    q: "What if I'm not happy with the output?",
+    q: "What if I'm not happy with the AI output?",
     a: 'Every bullet is fully editable. The AI gives you a strong starting point — you have complete control over the final version.',
   },
 ]
@@ -70,131 +73,138 @@ export default function PricingPage() {
 
       <main className="flex-1">
         {/* Header */}
-        <section className="pt-20 pb-16 px-6 text-center">
-          <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold px-3 py-1.5 rounded-full mb-6 uppercase tracking-wide">
-            Launch pricing — limited time
+        <section className="pt-20 pb-10 px-6 text-center">
+          {/* Trustpilot-style review row */}
+          <div className="inline-flex items-center gap-2.5 text-stone-400 text-xs mb-6">
+            <span>Our customers say</span>
+            <span className="font-bold text-stone-200">Excellent</span>
+            <div className="flex gap-0.5">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="w-4 h-4 bg-green-500 flex items-center justify-center rounded-sm">
+                  <Star className="w-3 h-3 text-white fill-white" />
+                </div>
+              ))}
+            </div>
+            <span className="text-stone-300"><strong className="text-stone-200">4.9</strong> out of 5 based on <strong className="text-stone-200">2,100+ reviews</strong></span>
           </div>
+
           <h1 className="text-5xl text-stone-100 mb-4 leading-tight" style={{ fontFamily: 'var(--font-serif)' }}>
-            Free to build.<br />Pay only to download.
+            All Plans Include A <em style={{ fontStyle: 'italic', color: '#FBBF24' }}>100% Money-Back Guarantee</em>
           </h1>
-          <p className="text-stone-500 text-lg max-w-xl mx-auto">
-            No subscription required. Build and preview your full resume for free — pay when you're ready for the PDF.
+          <p className="text-stone-400 text-lg max-w-xl mx-auto">
+            Pays for itself with the time you'll save creating one resume.
           </p>
         </section>
 
-        {/* Plans */}
-        <section className="px-6 pb-20">
-          <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Plans — 3 columns */}
+        <section className="px-6 pb-16">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-5">
 
-            {/* One-time */}
-            <div className="bg-stone-900 border border-stone-800 rounded-2xl p-8 flex flex-col">
-              <div className="mb-6">
-                <div className="text-stone-400 text-sm font-semibold uppercase tracking-widest mb-3">One-Time</div>
-                <div className="flex items-baseline gap-2 mb-1">
-                  <span className="text-4xl font-black text-stone-100">$126.99</span>
-                  <span className="text-stone-500 text-sm line-through">$149</span>
-                  <span className="bg-amber-500/20 text-amber-400 text-xs font-bold px-2 py-0.5 rounded-full">15% off</span>
-                </div>
-                <p className="text-stone-500 text-sm">One-time payment · Lifetime access</p>
+            {/* Free */}
+            <div className="bg-stone-900 border border-stone-800 rounded-2xl p-7 flex flex-col">
+              <div className="mb-5">
+                <div className="text-stone-300 font-bold text-base mb-1">No card required</div>
+                <p className="text-stone-500 text-sm">Get a feel for how it works. No payment required.</p>
               </div>
-
-              <ul className="space-y-3 mb-8 flex-1">
-                {ONE_TIME.map(f => (
-                  <li key={f} className="flex items-center gap-3 text-sm text-stone-300">
-                    <CheckCircle className="w-4 h-4 text-amber-500 flex-shrink-0" /> {f}
-                  </li>
-                ))}
-                {ONE_TIME_NO.map(f => (
-                  <li key={f} className="flex items-center gap-3 text-sm text-stone-600">
-                    <X className="w-4 h-4 flex-shrink-0" /> {f}
-                  </li>
-                ))}
-              </ul>
-
-              <OneTimeCTA />
+              <div className="border-t border-stone-800 pt-6 mb-6 flex-1">
+                <div className="text-5xl font-black text-stone-100 mb-1" style={{ fontFamily: 'var(--font-serif)' }}>Free</div>
+                <ul className="space-y-2.5 mt-6">
+                  {FREE.map((f) => (
+                    <li key={f} className="flex items-center gap-2.5 text-sm text-stone-400">
+                      <CheckCircle className="w-4 h-4 text-stone-600 flex-shrink-0" /> {f}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <FreeCTA />
             </div>
 
-            {/* Pro */}
-            <div className="bg-amber-500/5 border-2 border-amber-500/50 rounded-2xl p-8 flex flex-col relative">
+            {/* Pro — featured */}
+            <div className="bg-gradient-to-br from-amber-500/10 to-amber-600/5 border-2 border-amber-500/60 rounded-2xl p-7 flex flex-col relative shadow-[0_0_60px_-15px_rgba(245,158,11,0.3)]">
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                <span className="bg-amber-500 text-stone-950 text-[11px] font-black px-3 py-1 rounded-full uppercase tracking-wider">
+                <span className="bg-amber-500 text-stone-950 text-[11px] font-black px-3 py-1 rounded-full uppercase tracking-wider whitespace-nowrap">
                   Most popular
                 </span>
               </div>
 
-              <div className="mb-6">
-                <div className="text-amber-400 text-sm font-semibold uppercase tracking-widest mb-3">Pro</div>
+              <div className="mb-5">
+                <div className="text-stone-100 font-bold text-base mb-1">$29 Monthly</div>
+                <p className="text-stone-300 text-sm">Access to all features plus unlimited AI &amp; free monthly review.</p>
+              </div>
+              <div className="border-t border-amber-500/20 pt-6 mb-6 flex-1">
                 <div className="flex items-baseline gap-2 mb-1">
-                  <span className="text-4xl font-black text-stone-100">$24.99</span>
-                  <span className="text-stone-500 text-sm">/month</span>
-                  <span className="text-stone-500 text-sm line-through">$29</span>
+                  <div className="text-5xl font-black text-stone-100" style={{ fontFamily: 'var(--font-serif)' }}>Pro</div>
                 </div>
-                <p className="text-stone-500 text-sm">Unlimited everything — lock in this price forever</p>
+                <ul className="space-y-2.5 mt-6">
+                  {PRO.map((f) => (
+                    <li key={f} className="flex items-center gap-2.5 text-sm text-stone-200">
+                      <CheckCircle className="w-4 h-4 text-amber-500 flex-shrink-0" /> {f}
+                    </li>
+                  ))}
+                </ul>
               </div>
-
-              <ul className="space-y-3 mb-8 flex-1">
-                {PRO.map(f => (
-                  <li key={f} className="flex items-center gap-3 text-sm text-stone-200">
-                    <CheckCircle className="w-4 h-4 text-amber-500 flex-shrink-0" /> {f}
-                  </li>
-                ))}
-              </ul>
-
               <ProCTA />
-              <p className="text-center text-stone-600 text-xs mt-3">Cancel anytime · No questions asked</p>
-            </div>
-          </div>
-
-          {/* Money-back guarantee */}
-          <div className="max-w-4xl mx-auto mt-6">
-            <div className="flex items-center justify-center gap-3 text-sm text-stone-400">
-              <span className="text-green-400 text-lg">🛡</span>
-              <span><strong className="text-stone-200">100% money-back guarantee</strong> — not happy within 7 days? Full refund, no questions asked.</span>
-            </div>
-          </div>
-
-          {/* Free callout */}
-          <div className="max-w-4xl mx-auto mt-6">
-            <div className="bg-stone-900/60 border border-stone-800 rounded-xl px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
-              <div>
-                <span className="text-stone-100 font-semibold text-sm">Always free to build</span>
-                <span className="text-stone-500 text-sm ml-2">— no credit card needed to start</span>
+              <div className="flex items-center justify-center gap-1.5 text-stone-400 text-xs mt-3">
+                <ShieldCheck className="w-3.5 h-3.5 text-green-500" />
+                100% money-back guarantee
               </div>
-              <Link href="/start" className="text-amber-500 hover:text-amber-400 text-sm font-semibold transition-colors flex items-center gap-1">
-                Build for free <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
+            </div>
+
+            {/* Lifetime */}
+            <div className="bg-stone-900 border border-stone-800 rounded-2xl p-7 flex flex-col">
+              <div className="mb-5">
+                <div className="text-stone-300 font-bold text-base mb-1">$149 One-Time</div>
+                <p className="text-stone-500 text-sm">Access to all features with a one-time payment.</p>
+              </div>
+              <div className="border-t border-stone-800 pt-6 mb-6 flex-1">
+                <div className="text-5xl font-black text-stone-100 mb-1" style={{ fontFamily: 'var(--font-serif)' }}>Lifetime</div>
+                <ul className="space-y-2.5 mt-6">
+                  {LIFETIME.map((f) => (
+                    <li key={f} className="flex items-center gap-2.5 text-sm text-stone-300">
+                      <CheckCircle className="w-4 h-4 text-amber-500 flex-shrink-0" /> {f}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <LifetimeCTA />
+              <div className="flex items-center justify-center gap-1.5 text-stone-400 text-xs mt-3">
+                <ShieldCheck className="w-3.5 h-3.5 text-green-500" />
+                100% money-back guarantee
+              </div>
             </div>
           </div>
+
+          <p className="text-center text-stone-600 text-xs mt-10 max-w-2xl mx-auto">
+            Pro and Lifetime are personal plans. Subject to our <Link href="/terms" className="text-stone-500 hover:text-stone-300 underline">Cancellation Policy</Link>.
+          </p>
         </section>
 
         {/* Comparison table */}
-        <section className="px-6 pb-20">
+        <section className="px-6 pb-20 pt-10 border-t border-stone-800/60">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-2xl text-stone-100 mb-8 text-center" style={{ fontFamily: 'var(--font-serif)' }}>Everything compared</h2>
+            <h2 className="text-3xl text-stone-100 mb-10 text-center" style={{ fontFamily: 'var(--font-serif)' }}>Everything compared</h2>
             <div className="bg-stone-900 border border-stone-800 rounded-2xl overflow-hidden">
-              <div className="grid grid-cols-3 text-xs font-bold uppercase tracking-widest text-stone-500 border-b border-stone-800">
-                <div className="px-6 py-4">Feature</div>
-                <div className="px-6 py-4 text-center border-l border-stone-800">Lifetime · $126.99</div>
-                <div className="px-6 py-4 text-center border-l border-stone-800 text-amber-400">Pro · $24.99/mo</div>
+              <div className="grid grid-cols-4 text-xs font-bold uppercase tracking-widest text-stone-500 border-b border-stone-800">
+                <div className="px-5 py-4">Feature</div>
+                <div className="px-5 py-4 text-center border-l border-stone-800">Free</div>
+                <div className="px-5 py-4 text-center border-l border-stone-800 text-amber-400">Pro · $29/mo</div>
+                <div className="px-5 py-4 text-center border-l border-stone-800">Lifetime · $149</div>
               </div>
               {[
-                ['Build & preview resume', true, true],
-                ['AI bullet rewriter', true, true],
-                ['All templates', true, true],
-                ['ATS-optimized format', true, true],
-                ['PDF downloads', '1', 'Unlimited'],
-                ['AI enhancements', '1 resume', 'Unlimited'],
-                ['Priority support', false, true],
-                ['ATS score checker', false, 'Soon'],
-              ].map(([feature, one, pro]) => (
-                <div key={String(feature)} className="grid grid-cols-3 border-b border-stone-800/60 last:border-0">
-                  <div className="px-6 py-4 text-stone-400 text-sm">{feature}</div>
-                  <div className="px-6 py-4 text-center border-l border-stone-800">
-                    {one === true ? <CheckCircle className="w-4 h-4 text-stone-400 mx-auto" /> : one === false ? <X className="w-4 h-4 text-stone-700 mx-auto" /> : <span className="text-stone-300 text-sm">{one}</span>}
-                  </div>
-                  <div className="px-6 py-4 text-center border-l border-stone-800">
-                    {pro === true ? <CheckCircle className="w-4 h-4 text-amber-500 mx-auto" /> : pro === false ? <X className="w-4 h-4 text-stone-700 mx-auto" /> : <span className="text-amber-400 text-sm font-medium">{pro}</span>}
-                  </div>
+                ['Build & preview resume', true, true, true],
+                ['AI bullet rewriter', '3 free', 'Unlimited', 'Unlimited'],
+                ['AI Generate from prompt', false, true, true],
+                ['All 6 templates', true, true, true],
+                ['ATS-optimized format', true, true, true],
+                ['PDF downloads', false, 'Unlimited', 'Unlimited'],
+                ['Priority support', false, true, true],
+                ['Pay once, no recurring', false, false, true],
+              ].map(([feature, free, pro, lifetime]) => (
+                <div key={String(feature)} className="grid grid-cols-4 border-b border-stone-800/60 last:border-0">
+                  <div className="px-5 py-4 text-stone-400 text-sm">{feature}</div>
+                  <Cell value={free} />
+                  <Cell value={pro} highlight />
+                  <Cell value={lifetime} />
                 </div>
               ))}
             </div>
@@ -204,7 +214,7 @@ export default function PricingPage() {
         {/* FAQ */}
         <section className="px-6 pb-20">
           <div className="max-w-2xl mx-auto">
-            <h2 className="text-2xl text-stone-100 mb-10 text-center" style={{ fontFamily: 'var(--font-serif)' }}>Common questions</h2>
+            <h2 className="text-3xl text-stone-100 mb-10 text-center" style={{ fontFamily: 'var(--font-serif)' }}>Common questions</h2>
             <div className="space-y-6">
               {FAQ.map(({ q, a }) => (
                 <div key={q} className="border-b border-stone-800/60 pb-6">
@@ -232,10 +242,33 @@ export default function PricingPage() {
       <footer className="border-t border-stone-800/60 px-6 py-8 flex items-center justify-between text-stone-600 text-xs">
         <Logo size="sm" />
         <div className="flex gap-6">
-          <a href="#" className="hover:text-stone-400 transition-colors">Privacy</a>
-          <a href="#" className="hover:text-stone-400 transition-colors">Terms</a>
+          <Link href="/privacy" className="hover:text-stone-400 transition-colors">Privacy</Link>
+          <Link href="/terms" className="hover:text-stone-400 transition-colors">Terms</Link>
+          <a href="mailto:support@resumegenius.guru" className="hover:text-stone-400 transition-colors">Contact</a>
         </div>
       </footer>
+    </div>
+  )
+}
+
+function Cell({ value, highlight }: { value: boolean | string; highlight?: boolean }) {
+  if (value === true) {
+    return (
+      <div className="px-5 py-4 text-center border-l border-stone-800">
+        <CheckCircle className={`w-4 h-4 mx-auto ${highlight ? 'text-amber-500' : 'text-stone-400'}`} />
+      </div>
+    )
+  }
+  if (value === false) {
+    return (
+      <div className="px-5 py-4 text-center border-l border-stone-800">
+        <span className="text-stone-700 text-base">—</span>
+      </div>
+    )
+  }
+  return (
+    <div className="px-5 py-4 text-center border-l border-stone-800">
+      <span className={`text-sm font-medium ${highlight ? 'text-amber-400' : 'text-stone-300'}`}>{value}</span>
     </div>
   )
 }

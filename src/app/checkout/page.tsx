@@ -11,22 +11,22 @@ const PLANS = [
   {
     id: 'one-time' as const,
     label: 'One-Time Download',
-    price: '$126.99',
-    originalPrice: '$149',
-    badge: '15% off',
-    sub: 'one time Â· lifetime access',
-    features: ['Unlimited PDF downloads', 'All AI bullet rewrites', 'All templates', 'ATS-optimized format', 'Lifetime access â€” pay once'],
-    cta: 'Pay $126.99 â€” Lifetime Access',
+    price: '$149',
+    originalPrice: '',
+    badge: 'Lifetime',
+    sub: 'one time · lifetime access',
+    features: ['Unlimited PDF downloads', 'All AI bullet rewrites', 'All templates', 'ATS-optimized format', 'Lifetime access — pay once'],
+    cta: 'Get Lifetime Access — $149',
   },
   {
     id: 'subscription' as const,
     label: 'Monthly Pro',
-    price: '$24.99',
-    originalPrice: '$29',
-    badge: '15% off',
+    price: '$29',
+    originalPrice: '',
+    badge: 'Most popular',
     sub: 'per month',
     features: ['Unlimited PDF downloads', 'Unlimited AI enhancements', 'All 6 templates', 'Priority support', 'ATS score checker (soon)', 'Cancel anytime'],
-    cta: 'Start Pro Â· $24.99/mo',
+    cta: 'Start Pro · $29/mo',
   },
 ]
 
@@ -42,7 +42,7 @@ function CheckoutInner() {
     setError('')
     rdtTrack('AddToCart', {
       currency: 'USD',
-      value: selected === 'subscription' ? 24.99 : 126.99,
+      value: selected === 'subscription' ? 29 : 149,
       itemCount: 1,
     })
     try {
@@ -81,7 +81,7 @@ function CheckoutInner() {
       <div className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
 
-          {/* Left â€” what you get */}
+          {/* Left — what you get */}
           <div className="space-y-8">
             <div>
               {resumeId ? (
@@ -130,7 +130,7 @@ function CheckoutInner() {
             </div>
           </div>
 
-          {/* Right â€” plan selector + pay */}
+          {/* Right — plan selector + pay */}
           <div className="space-y-4">
             {PLANS.map((plan) => {
               const active = selected === plan.id
@@ -202,7 +202,7 @@ function CheckoutInner() {
 
             <div className="flex items-center justify-center gap-1.5 text-stone-600 text-xs">
               <Lock className="w-3 h-3" />
-              256-bit SSL encryption Â· Powered by Stripe
+              256-bit SSL encryption · Powered by Stripe
             </div>
 
             <div className="flex items-center justify-center gap-2 bg-stone-800/60 border border-stone-700 rounded-xl px-4 py-3">
