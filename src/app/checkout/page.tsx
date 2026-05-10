@@ -118,7 +118,7 @@ function CheckoutInner() {
             {/* Testimonial */}
             <div className="bg-stone-900 border border-stone-800 rounded-2xl p-5">
               <p className="text-stone-400 text-sm leading-relaxed italic mb-3">
-                &ldquo;Got three interview requests the week I updated my resume with seoForge. Worth every penny.&rdquo;
+                &ldquo;Got three interview requests the week I updated my resume with ResumeGenius. Worth every penny.&rdquo;
               </p>
               <div className="flex items-center gap-2.5">
                 <div className="w-7 h-7 rounded-full bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xs font-bold">M</div>
